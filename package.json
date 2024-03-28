@@ -1,8 +1,12 @@
 {
-  "name": "my-app",
+  "name": "personal-coordinator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.14",
+    "@mui/material": "^5.15.14",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -20,13 +24,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write './src/**/*.{ts,tsx}'",
+    "stylelint": "stylelint \"src/**/*.{css,scss}\" --aei",
+    "lint": "npm run format && npm run stylelint && eslint --fix src --ext .ts --ext .tsx"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
   },
   "browserslist": {
     "production": [
@@ -39,5 +43,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "3.2.5",
+    "simple-git-hooks": "^2.11.1",
+    "stylelint": "^16.3.1",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-order": "^6.0.4"
   }
 }
