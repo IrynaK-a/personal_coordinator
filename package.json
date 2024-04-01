@@ -1,6 +1,7 @@
 {
   "name": "personal-coordinator",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -14,9 +15,13 @@
     "@types/node": "^16.18.91",
     "@types/react": "^18.2.70",
     "@types/react-dom": "^18.2.22",
+    "classnames": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "react-router-hash-link": "^2.4.3",
     "react-scripts": "5.0.1",
+    "sass": "^1.72.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -26,8 +31,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write './src/**/*.{ts,tsx}'",
-    "stylelint": "stylelint \"src/**/*.{css,scss}\" --aei",
-    "lint": "npm run format && npm run stylelint && eslint --fix src --ext .ts --ext .tsx"
+    "stylelint": "stylelint \"src/**/*.{css,scss}\" --aei --fix",
+    "lint": "npm run format && npm run stylelint && eslint --fix src --ext .ts,.tsx"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -45,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-hash-link": "^2.4.9",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
     "eslint-config-airbnb": "^19.0.4",

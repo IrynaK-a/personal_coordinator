@@ -1,5 +1,6 @@
 extends:
   - stylelint-config-standard
+  - stylelint-config-recommended-scss
 
 plugins:
   - stylelint-order
@@ -8,8 +9,9 @@ rules:
   selector-class-pattern: null
   color-hex-length: long
   declaration-no-important: true
-  max-nesting-depth: 0
+  max-nesting-depth: 1
   no-descending-specificity: true
+  import-notation: string
 
   order/order:
     - custom-properties
@@ -101,9 +103,9 @@ rules:
     - overflow-y
     - color
     - font
-    - font-weight
-    - font-size
     - font-family
+    - font-size
+    - font-weight
     - font-style
     - font-display
     - font-variant
