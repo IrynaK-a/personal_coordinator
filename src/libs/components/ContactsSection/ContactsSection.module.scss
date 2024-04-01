@@ -1,0 +1,89 @@
+@import '../../../assets/css/variables';
+@import '../../../assets/css/mixins';
+
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  @include h2;
+
+  margin-bottom: 20px;
+
+  @include on-big-screens {
+    @include h1;
+
+    margin-bottom: 40px;
+  }
+}
+
+.sectionText {
+  @include body-text;
+
+  margin-bottom: 30px;
+  color: $icons;
+  font-weight: 700;
+
+
+  @include on-big-screens {
+    max-width: 950px;
+    margin-bottom: 50px;
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+.contactsForm {
+  position: relative;
+  width: 100%;
+  height: 52px;
+
+  @include on-big-screens {
+    max-width: 600px;
+    height: 52px;
+  }
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  padding: 16px 80px 16px 20px;
+  font-family: inherit;
+  background-color: rgb(204 204 204 / 30%);
+  border: none;
+  border-radius: 50px;
+
+  &::placeholder {
+    color: $icons;
+  }
+
+  &:focus {
+    border: 1px solid $icons;
+    outline: none;
+  }
+
+  @include on-big-screens {
+    padding: 16px 155px 16px 20px;
+  }
+}
+
+.button {
+  @include flexbox-center;
+  @include small-text;
+  @include button-standart;
+
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 68px;
+  height: 42px;
+  font-weight: 600;
+
+  @include on-big-screens {
+    @include buttons-text;
+
+    width: 135px;
+    height: 42px;
+  }
+}
