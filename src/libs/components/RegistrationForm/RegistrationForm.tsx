@@ -1,74 +1,81 @@
-import cn from 'classnames';
 import { StyledEngineProvider } from '@mui/material/styles';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import Button from '@mui/material/Button';
+import { signUpSchema } from '../../validationSchemas/signUpSchema';
+import { ISignUpFormData } from '../../types/signUpFormData.interface';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import * as authActions from '../../slices/authSlice';
 
-import { useState } from 'react';
 import styles from './RegistrationForm.module.scss';
 
 export const RegistrationForm = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatedPassword, setRepeatedPassword] = useState('');
-  const [formError, setFormError] = useState(false);
+  const dispatch = useAppDispatch();
+  const { authRequestStatus } = useAppSelector(state => state.auth);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<ISignUpFormData>({
+    resolver: yupResolver(signUpSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (
-      !name.trim() &&
-      !email.trim() &&
-      !password.trim() &&
-      !repeatedPassword.trim()
-    ) {
-      setFormError(true);
-    }
+  const onSubmit = ({ email, userName, password }: ISignUpFormData) => {
+    dispatch(authActions.signUp({ email, userName, password }));
   };
 
   return (
     <StyledEngineProvider injectFirst>
       <form
-        className={cn(styles.form, {
-          [styles.error]: formError,
-        })}
-        onSubmit={e => handleSubmit(e)}
+        className={styles.form}
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
       >
         <input
+          id="userName"
           type="text"
           className={styles.input}
           placeholder="Name"
-          onChange={e => setName(e.target.value)}
+          {...register('userName')}
         />
+        <p className={styles.error}>{errors.userName?.message}</p>
 
         <input
+          id="email"
           type="email"
           className={styles.input}
           placeholder="Email"
-          onChange={e => setEmail(e.target.value)}
+          {...register('email')}
         />
+        <p className={styles.error}>{errors.email?.message}</p>
 
         <input
+          id="password"
           type="password"
           className={styles.input}
           placeholder="Password"
-          onChange={e => setPassword(e.target.value)}
+          {...register('password')}
         />
+        <p className={styles.error}>{errors.password?.message}</p>
 
         <input
+          id="confirmedPassword"
           type="password"
           className={styles.input}
-          placeholder="Repeat password"
-          onChange={e => setRepeatedPassword(e.target.value)}
+          placeholder="Confirm password"
+          {...register('confirmedPassword')}
         />
+        <p className={styles.error}>{errors.confirmedPassword?.message}</p>
 
-        <Button
+        <LoadingButton
+          loading={authRequestStatus === 'pending'}
           variant="contained"
           type="submit"
           className={styles.submitButton}
         >
-          Sign up
-        </Button>
+          <span>Sign up</span>
+        </LoadingButton>
       </form>
     </StyledEngineProvider>
   );

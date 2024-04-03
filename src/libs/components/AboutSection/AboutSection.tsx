@@ -1,8 +1,8 @@
 import cn from 'classnames';
 import { StyledEngineProvider } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 
-import { MENU_ITEMS } from '../../constants';
+import { NavHashLink } from 'react-router-hash-link';
+import { LANDING_MENU_ITEMS } from '../../constants';
 
 import styles from './AboutSection.module.scss';
 
@@ -14,7 +14,7 @@ export const AboutSection: React.FC<Props> = ({ className }) => {
   return (
     <StyledEngineProvider injectFirst>
       <section
-        id={MENU_ITEMS.About}
+        id={LANDING_MENU_ITEMS.About}
         className={cn(styles.section, className)}
       >
         <h2 className={styles.sectionTitle}>About the Project</h2>
@@ -33,13 +33,13 @@ export const AboutSection: React.FC<Props> = ({ className }) => {
           <span className={styles.styledSubtitleText}> with AI</span>
         </h2>
 
-        <Button
-          variant="contained"
-          href={`#${MENU_ITEMS.Home}`}
+        <NavHashLink
+          smooth
+          to={`#${LANDING_MENU_ITEMS.Account}`}
           className={styles.button}
         >
           Try it
-        </Button>
+        </NavHashLink>
 
         <h3 className={styles.quote}>
           “We

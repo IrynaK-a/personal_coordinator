@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { StyledEngineProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 
-import { MENU_ITEMS } from '../../constants';
+import { LANDING_MENU_ITEMS } from '../../constants';
 
 import styles from './ContactsSection.module.scss';
 
@@ -14,7 +14,7 @@ export const ContactsSection: React.FC<Props> = ({ className }) => {
   return (
     <StyledEngineProvider injectFirst>
       <section
-        id={MENU_ITEMS.Contacts}
+        id={LANDING_MENU_ITEMS.Contacts}
         className={cn(styles.section, className)}
       >
         <h2 className={styles.sectionTitle}>Do you have questions?</h2>

@@ -1,9 +1,8 @@
 import { StyledEngineProvider } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 
-import { useState } from 'react';
-import { MENU_ITEMS } from '../../constants';
+import { useLocation, NavLink } from 'react-router-dom';
 
+import { LANDING_MENU_ITEMS, REGISTRATION_PATH } from '../../constants';
 import { LoginForm } from '../LoginForm/LoginForm';
 import { RegistrationForm } from '../RegistrationForm/RegistrationForm';
 
@@ -14,35 +13,38 @@ type Props = {
 };
 
 export const Registration: React.FC<Props> = ({ className }) => {
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const isRegistration = location.hash === `#${REGISTRATION_PATH.Register}`;
 
   return (
     <StyledEngineProvider injectFirst>
       <section
-        id={MENU_ITEMS.Home}
+        id={LANDING_MENU_ITEMS.Account}
         className={(styles.section, className)}
       >
         <h1 className={styles.title}>Personal Coordinator</h1>
 
         <div className={styles.buttonGroup}>
-          <Button
-            variant="text"
-            className={isLogin ? styles.textButtonActive : styles.textButton}
-            onClick={() => setIsLogin(true)}
+          <NavLink
+            to={`#${LANDING_MENU_ITEMS.Account}`}
+            className={
+              isRegistration ? styles.textButton : styles.textButtonActive
+            }
           >
             Log in
-          </Button>
+          </NavLink>
 
-          <Button
-            variant="text"
-            className={!isLogin ? styles.textButtonActive : styles.textButton}
-            onClick={() => setIsLogin(false)}
+          <NavLink
+            to={`#${REGISTRATION_PATH.Register}`}
+            className={
+              isRegistration ? styles.textButtonActive : styles.textButton
+            }
           >
             Sign up
-          </Button>
+          </NavLink>
         </div>
 
-        {isLogin ? <LoginForm /> : <RegistrationForm />}
+        {!isRegistration ? <LoginForm /> : <RegistrationForm />}
       </section>
     </StyledEngineProvider>
   );
