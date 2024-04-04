@@ -35,7 +35,7 @@ export const AboutSection: React.FC<Props> = ({ className }) => {
 
         <NavHashLink
           smooth
-          to={`#${LANDING_MENU_ITEMS.Account}`}
+          to={`#${LANDING_MENU_ITEMS.Home}`}
           className={styles.button}
         >
           Try it

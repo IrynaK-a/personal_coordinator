@@ -19,14 +19,14 @@ export const Registration: React.FC<Props> = ({ className }) => {
   return (
     <StyledEngineProvider injectFirst>
       <section
-        id={LANDING_MENU_ITEMS.Account}
+        id={LANDING_MENU_ITEMS.Home}
         className={(styles.section, className)}
       >
         <h1 className={styles.title}>Personal Coordinator</h1>
 
         <div className={styles.buttonGroup}>
           <NavLink
-            to={`#${LANDING_MENU_ITEMS.Account}`}
+            to={`#${LANDING_MENU_ITEMS.Home}`}
             className={
               isRegistration ? styles.textButton : styles.textButtonActive
             }

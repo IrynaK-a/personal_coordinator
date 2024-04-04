@@ -1,5 +1,5 @@
 import { Nav } from '../Nav';
-import { Logo } from '../Logo';
+import { LogoIcon } from '../Logo';
 
 import styles from './Footer.module.scss';
 
@@ -9,7 +9,7 @@ export const Footer = () => {
       <Nav className={styles.footerNav} />
 
       <div className={styles.logo}>
-        <Logo />
+        <LogoIcon />
       </div>
     </footer>
   );

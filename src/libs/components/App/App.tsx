@@ -1,14 +1,25 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { MainPage } from '../../pages/MainPage';
+import { MainPage, HomePage, AccountLayout } from '../../pages';
 
 export const App = () => {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<MainPage />}
-      />
+      <Route path="/">
+        <Route
+          index
+          element={<MainPage />}
+        />
+        <Route
+          path="/"
+          element={<AccountLayout />}
+        >
+          <Route
+            path="home"
+            element={<HomePage />}
+          />
+        </Route>
+      </Route>
     </Routes>
   );
 };
