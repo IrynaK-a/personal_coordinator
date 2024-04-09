@@ -12,7 +12,6 @@ type AuthPath = 'login' | 'register';
 
 const authFetch = axios.create({
   baseURL: BASE_API_URL,
-  headers: { 'Content-Type': 'application/json; charset: UTF-8' },
 });
 
 const request = async (

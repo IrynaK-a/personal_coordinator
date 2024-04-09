@@ -21,8 +21,13 @@ export const RegistrationForm = () => {
     resolver: yupResolver(signUpSchema),
   });
 
-  const onSubmit = ({ email, userName, password }: ISignUpFormData) => {
-    dispatch(authActions.signUp({ email, userName, password }));
+  const onSubmit = ({
+    email,
+    firstName,
+    lastName,
+    password,
+  }: ISignUpFormData) => {
+    dispatch(authActions.signUp({ email, firstName, lastName, password }));
   };
 
   return (
@@ -33,13 +38,22 @@ export const RegistrationForm = () => {
         autoComplete="off"
       >
         <input
-          id="userName"
+          id="firstName"
           type="text"
           className={styles.input}
-          placeholder="Name"
-          {...register('userName')}
+          placeholder="First name"
+          {...register('firstName')}
         />
-        <p className={styles.error}>{errors.userName?.message}</p>
+        <p className={styles.error}>{errors.firstName?.message}</p>
+
+        <input
+          id="lastName"
+          type="text"
+          className={styles.input}
+          placeholder="Last name"
+          {...register('lastName')}
+        />
+        <p className={styles.error}>{errors.lastName?.message}</p>
 
         <input
           id="email"

@@ -26,7 +26,6 @@ export const signUp = createAsyncThunk(
     const { userName, token } = await authApi.signUp(payload);
 
     localStorage.setItem('Token', token);
-    console.log(userName, token);
 
     return userName;
   },

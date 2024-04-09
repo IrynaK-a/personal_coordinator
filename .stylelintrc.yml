@@ -9,7 +9,7 @@ rules:
   selector-class-pattern: null
   color-hex-length: long
   declaration-no-important: true
-  max-nesting-depth: 1
+  max-nesting-depth: 2
   no-descending-specificity: true
   import-notation: string
 
