@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import { App } from './libs/components';
+import { router } from './libs/components';
 import { store } from './libs/app/store';
 
 import './assets/css/scaffolding.scss';
@@ -15,9 +15,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
-        <App />
-      </Router>
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>,
 );

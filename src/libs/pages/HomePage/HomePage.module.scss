@@ -48,7 +48,7 @@
   }
 }
 
-.getInspired {
+.getInspiredButton {
   @include small-text;
   @include flexbox-center;
   @include button-hover;
@@ -82,9 +82,9 @@
   }
 }
 
-.inspiration {
+.inspirationSection {
   width: 100%;
-  min-height: 40px;
+  min-height: 20px;
   margin-bottom: 30px;
   padding: 10px;
   color: $primary;

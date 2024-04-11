@@ -1,3 +1,3 @@
 export { HomePage } from './HomePage';
-export { MainPage } from './MainPage';
+export { LandingPage } from './LandingPage';
 export { AccountLayout } from './AccountLayout';

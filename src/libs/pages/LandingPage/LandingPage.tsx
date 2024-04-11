@@ -9,9 +9,9 @@ import {
   Registration,
 } from '../../components';
 
-import styles from './MainPage.module.scss';
+import styles from './LandingPage.module.scss';
 
-export const MainPage = () => {
+export const LandingPage = () => {
   const location = useLocation();
 
   useEffect(() => {

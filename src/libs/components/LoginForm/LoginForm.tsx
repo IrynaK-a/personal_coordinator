@@ -3,7 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
-import { ISignInFormData } from '../../types';
+import { useNavigate } from 'react-router';
+import { AppRoute, ISignInFormData } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { signInSchema } from '../../validationSchemas/signInSchema';
 import * as authActions from '../../slices/authSlice';
@@ -12,7 +13,8 @@ import styles from './LoginForm.module.scss';
 
 export const LoginForm = () => {
   const dispatch = useAppDispatch();
-  const { authRequestStatus } = useAppSelector(state => state.auth);
+  const navigate = useNavigate();
+  const { authRequestStatus, user } = useAppSelector(state => state.auth);
 
   const {
     handleSubmit,
@@ -22,8 +24,12 @@ export const LoginForm = () => {
     resolver: yupResolver(signInSchema),
   });
 
-  const onSubmit = ({ email, password }: ISignInFormData) => {
-    dispatch(authActions.signIn({ email, password }));
+  const onSubmit = async ({ email, password }: ISignInFormData) => {
+    await dispatch(authActions.signIn({ email, password }));
+
+    if (user) {
+      navigate(AppRoute.HOME);
+    }
   };
 
   return (

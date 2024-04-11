@@ -9,7 +9,13 @@ import style from './HomePage.module.scss';
 
 export const HomePage = () => {
   const dispatch = useAppDispatch();
-  const { answer, aiRequestStatus } = useAppSelector(store => store.ai);
+  const { quote, aiRequestStatus, userName } = useAppSelector(
+    ({ ai, auth }) => ({
+      quote: ai.answer,
+      userName: auth.user,
+      aiRequestStatus: ai.aiRequestStatus,
+    }),
+  );
   const [inspiration, setInspiration] = useState<IInspirationResponse | null>(
     null,
   );
@@ -22,22 +28,22 @@ export const HomePage = () => {
   };
 
   useEffect(() => {
-    if (answer && typeof answer !== 'string') {
-      setInspiration(answer);
+    if (quote && typeof quote !== 'string') {
+      setInspiration(quote);
     }
-  }, [answer]);
+  }, [quote]);
 
   return (
     <div className={style.home}>
       <div className={style.personInfo}>
         <div className={style.leftInfo}>
-          <h2 className={style.name}>Hi, Person</h2>
+          <h2 className={style.name}>{`Hi, ${userName}`}</h2>
 
           <p className={style.text}>Have a nice day!</p>
 
           <button
             type="button"
-            className={style.getInspired}
+            className={style.getInspiredButton}
             onClick={getInspired}
           >
             get inspired
@@ -52,7 +58,7 @@ export const HomePage = () => {
       </div>
 
       <section
-        className={style.inspiration}
+        className={style.inspirationSection}
         style={{
           display: hasInspirationShown ? 'block' : 'none',
         }}
