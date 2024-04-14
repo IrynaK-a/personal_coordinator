@@ -47,6 +47,7 @@
     ],
     "arrow-body-style": "off",
     "react/prop-types": 0,
-    "import/no-cycle": [2, { "maxDepth": 1 }]
+    "import/no-cycle": [2, { "maxDepth": 1 }],
+    "react/jsx-props-no-spreading": 0
   }
 }

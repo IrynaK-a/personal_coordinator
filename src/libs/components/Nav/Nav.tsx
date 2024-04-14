@@ -2,7 +2,7 @@ import cn from 'classnames';
 
 import { NavHashLink } from 'react-router-hash-link';
 import { useLocation } from 'react-router-dom';
-import { MENU_ITEMS } from '../../constants';
+import { LANDING_MENU_ITEMS } from '../../constants';
 
 import styles from './Nav.module.scss';
 
@@ -16,7 +16,7 @@ export const Nav: React.FC<Props> = ({ className }) => {
   return (
     <nav className={styles.nav}>
       <ul className={cn(styles.list, className)}>
-        {Object.values(MENU_ITEMS).map(item => (
+        {Object.values(LANDING_MENU_ITEMS).map(item => (
           <li
             key={item}
             className={styles.item}
