@@ -171,18 +171,17 @@
 .contentContainer {
   flex-grow: 1;
   height: calc(100% - $menu-height-mobile);
-  padding: $content-padding-mobile;
+  padding: $content-padding-top-mobile $content-padding-inline-mobile $content-padding-bottom;
   background-color: $hover;
 
   @include on-big-screens {
     min-width: calc(100% - $menu-width-desktop);
     height: 100%;
-    padding: $content-padding-desktop;
+    padding: $content-padding-top-desktop $content-padding-inline-desktop $content-padding-bottom;
   }
 
   @include on-tablet {
     min-width: calc(100% - $menu-width-tablet);
-    padding: $content-padding-tablet;
   }
 }
 

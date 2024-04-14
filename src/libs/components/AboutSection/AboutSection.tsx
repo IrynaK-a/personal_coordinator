@@ -20,7 +20,7 @@ export const AboutSection: React.FC<Props> = ({ className }) => {
         <h2 className={styles.sectionTitle}>About the Project</h2>
 
         <p className={styles.aboutText}>
-          <span className={styles.styledName}>Personal coordinator</span>
+          <span className={styles.styledName}>{`Personal coordinator `} </span>
           is an innovating e-learning platform committed to ensuring accessible
           and effective education. Our platform is created to upgarate your
           studying experience and create a friendly and modern environment for

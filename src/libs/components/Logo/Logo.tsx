@@ -4,6 +4,7 @@ import cn from 'classnames';
 import logo from '../../../assets/icons/logo.svg';
 
 import styles from './Logo.module.scss';
+import { AppRoute } from '../../types';
 
 type LogoIconProps = {
   className?: string;
@@ -24,7 +25,7 @@ const handleClick = () => {
 
 export const LogoIcon: React.FC<LogoIconProps> = ({
   className,
-  linkTo = '/',
+  linkTo = AppRoute.ROOT,
 }) => {
   return (
     <Link
@@ -43,7 +44,7 @@ export const LogoIcon: React.FC<LogoIconProps> = ({
 
 export const LogoText: React.FC<LogoTextProps> = ({
   className,
-  linkTo = '/',
+  linkTo = AppRoute.ROOT,
 }) => {
   return (
     <Link
