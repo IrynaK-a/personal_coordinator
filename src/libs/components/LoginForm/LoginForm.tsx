@@ -1,35 +1,62 @@
 import { StyledEngineProvider } from '@mui/material/styles';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import Button from '@mui/material/Button';
+import { useForm } from 'react-hook-form';
+import { LoadingButton } from '@mui/lab';
+import { ISignInFormData } from '../../types';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { signInSchema } from '../../validationSchemas/signInSchema';
+import * as authActions from '../../slices/authSlice';
 
 import styles from './LoginForm.module.scss';
 
 export const LoginForm = () => {
+  const dispatch = useAppDispatch();
+  const { authRequestStatus } = useAppSelector(state => state.auth);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<ISignInFormData>({
+    resolver: yupResolver(signInSchema),
+  });
+
+  const onSubmit = ({ email, password }: ISignInFormData) => {
+    dispatch(authActions.signIn({ email, password }));
+  };
+
   return (
     <StyledEngineProvider injectFirst>
       <form
         className={styles.form}
         autoComplete="off"
+        onSubmit={handleSubmit(onSubmit)}
       >
         <input
           type="email"
           className={styles.input}
           placeholder="Enter your email"
+          {...register('email')}
         />
+        <p className={styles.error}>{errors.email?.message}</p>
 
         <input
           type="password"
           className={styles.input}
           placeholder="Password"
+          {...register('password')}
         />
+        <p className={styles.error}>{errors.password?.message}</p>
 
-        <Button
+        <LoadingButton
+          loading={authRequestStatus === 'pending'}
           variant="contained"
           type="submit"
           className={styles.submitButton}
         >
-          Log in
-        </Button>
+          <span>Log in</span>
+        </LoadingButton>
       </form>
     </StyledEngineProvider>
   );
