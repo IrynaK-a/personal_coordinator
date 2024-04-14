@@ -1,25 +1,57 @@
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
-import logo from '../../../assets/icons/Logo.png';
+import logo from '../../../assets/icons/logo.svg';
 
 import styles from './Logo.module.scss';
 
-type Props = {
+type LogoIconProps = {
   className?: string;
+  linkTo?: string;
 };
 
-export const Logo: React.FC<Props> = ({ className }) => {
+type LogoTextProps = {
+  className?: string;
+  linkTo?: string;
+};
+
+const handleClick = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
+
+export const LogoIcon: React.FC<LogoIconProps> = ({
+  className,
+  linkTo = '/',
+}) => {
   return (
     <Link
-      to="/"
-      className={cn(styles.logo, className)}
+      to={linkTo}
+      className={cn(styles.logoIcon, className)}
+      onClick={handleClick}
     >
       <img
         className={styles.logoImage}
         src={logo}
         alt="logo"
       />
+    </Link>
+  );
+};
+
+export const LogoText: React.FC<LogoTextProps> = ({
+  className,
+  linkTo = '/',
+}) => {
+  return (
+    <Link
+      to={linkTo}
+      className={cn(styles.logoTextLink, className)}
+      onClick={handleClick}
+    >
+      <h1 className={styles.logoText}>Personal Coordinator</h1>
     </Link>
   );
 };

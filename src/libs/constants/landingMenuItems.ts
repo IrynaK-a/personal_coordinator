@@ -1,5 +1,5 @@
 export const LANDING_MENU_ITEMS = {
-  Account: 'account',
+  Home: 'home',
   About: 'about',
   Contacts: 'contacts',
 };

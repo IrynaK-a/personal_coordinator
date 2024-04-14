@@ -1,7 +1,7 @@
 import cn from 'classnames';
 
 import { Nav } from '../Nav';
-import { Logo } from '../Logo';
+import { LogoIcon } from '../Logo';
 
 import styles from './Header.module.scss';
 
@@ -12,7 +12,7 @@ type Props = {
 export const Header: React.FC<Props> = ({ className }) => {
   return (
     <header className={cn(styles.header, className)}>
-      <Logo />
+      <LogoIcon />
 
       <Nav />
     </header>
