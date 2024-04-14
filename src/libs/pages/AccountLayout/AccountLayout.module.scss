@@ -1,6 +1,6 @@
-@import '../../../assets/css/variables';
-@import '../../../assets/css/mixins';
-@import '../../../assets/css/breakpoints';
+@import '/src/assets/css/variables';
+@import '/src/assets/css/mixins';
+@import '/src/assets/css/breakpoints';
 
 .container {
   display: flex;
@@ -117,9 +117,17 @@
 
   padding: 10px;
   color: $secondary;
+  transition: all 0.3s;
 
   @include on-big-screens {
     padding: 0;
+  }
+
+  &:hover > *,
+  &:hover > * > *
+   {
+    color: $main-accent;
+    fill: $main-accent;
   }
 }
 

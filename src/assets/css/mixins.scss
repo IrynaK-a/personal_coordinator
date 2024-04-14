@@ -95,9 +95,14 @@
   border-radius: 50px;
   transition: all 0.3s;
 
+
+  @include button-hover;
+}
+
+@mixin button-hover {
   &:hover {
     background-color: $primary;
-    border: 1px solid $primary;
+    border-color: $primary;
     box-shadow: 0 3px 13px 0 rgb(23 32 49 / 40%);
   }
 }

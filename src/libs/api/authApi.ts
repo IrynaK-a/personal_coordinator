@@ -4,15 +4,18 @@ import { UserSignInRequestDto, UserSignUpRequestDto } from '../types';
 const BASE_API_URL = 'http://localhost:8080/api/auth/';
 
 type AuthUserResponse = {
-  userName: string;
+  user: string;
   token: string;
 };
 
-type AuthPath = 'login' | 'register';
+type CurrentUserResponse = {
+  firstName: string;
+};
+
+type AuthPath = 'login' | 'register' | 'current-user';
 
 const authFetch = axios.create({
   baseURL: BASE_API_URL,
-  headers: { 'Content-Type': 'application/json; charset: UTF-8' },
 });
 
 const request = async (
@@ -26,7 +29,18 @@ const request = async (
   return data;
 };
 
+const getCurrent = async (token: string) => {
+  const { data } = await authFetch.get<CurrentUserResponse>('current-user', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return data.firstName;
+};
+
 export const authApi = {
   signIn: (payload: UserSignInRequestDto) => request('login', payload),
   signUp: (payload: UserSignUpRequestDto) => request('register', payload),
+  getCurrentUser: (token: string) => getCurrent(token),
 };

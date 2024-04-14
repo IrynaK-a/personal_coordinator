@@ -1,15 +1,31 @@
 import cn from 'classnames';
 
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../app/hooks';
 import { ACCOUNT_MENU_ITEMS } from '../../constants';
 import { LogoIcon, LogoText } from '../../components';
 import { ReactComponent as LogOut } from '../../../assets/icons/log-out.svg';
+import { AppRoute } from '../../types';
+import * as authActions from '../../slices/authSlice';
 
 import styles from './AccountLayout.module.scss';
 
 const logOutLabel = 'Log out';
 
-export const AccountLayout = () => {
+type Props = {
+  children: React.ReactElement;
+};
+
+export const AccountLayout: React.FC<Props> = ({ children }) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    navigate(AppRoute.ROOT);
+
+    dispatch(authActions.actions.logOut());
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.layout}>
@@ -50,8 +66,9 @@ export const AccountLayout = () => {
           </nav>
 
           <NavLink
-            to="/"
+            to={AppRoute.ROOT}
             className={styles.link}
+            onClick={handleLogout}
           >
             <LogOut className={styles.linkImg} />
 
@@ -60,9 +77,7 @@ export const AccountLayout = () => {
         </header>
 
         <div className={styles.contentContainer}>
-          <div className={styles.content}>
-            <Outlet />
-          </div>
+          <div className={styles.content}>{children}</div>
         </div>
       </div>
     </div>

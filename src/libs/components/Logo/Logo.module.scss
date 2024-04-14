@@ -1,5 +1,5 @@
-@import '../../../assets/css/variables';
-@import '../../../assets/css/mixins';
+@import '/src/assets/css/variables';
+@import '/src/assets/css/mixins';
 
 .logoIcon {
   display: flex;
@@ -28,4 +28,9 @@
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
+  transition: all 0.3s;
+
+  &:hover {
+    color: $primary;
+  }
 } 

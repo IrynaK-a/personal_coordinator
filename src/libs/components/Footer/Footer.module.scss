@@ -1,5 +1,5 @@
-@import '../../../assets/css/variables';
-@import '../../../assets/css/mixins';
+@import '/src/assets/css/variables';
+@import '/src/assets/css/mixins';
 
 .footer {
   @include flexbox-center;

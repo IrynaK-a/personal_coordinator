@@ -6,3 +6,7 @@ export { LogoIcon, LogoText } from './Logo';
 export { Registration } from './Registration';
 export { AboutSection } from './AboutSection';
 export { ContactsSection } from './ContactsSection';
+export { CourseCard } from './CourseCard';
+export { ProtectedRoute } from './ProtectedRoute';
+export { PublicRoute } from './PublicRoute';
+export { router } from './Router';

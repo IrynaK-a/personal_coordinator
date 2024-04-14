@@ -4,7 +4,18 @@ import { UserValidationRule } from '../types/userValidationRule.enum';
 import { UserValidationMessage } from '../types';
 
 export const signUpSchema: ObjectSchema<ISignUpFormData> = object({
-  userName: string()
+  firstName: string()
+    .min(
+      UserValidationRule.NAME_MIN_LENGTH,
+      UserValidationMessage.NAME_MIN_LENGTH,
+    )
+    .max(
+      UserValidationRule.NAME_MAX_LENGTH,
+      UserValidationMessage.NAME_MAX_LENGTH,
+    )
+    .matches(UserValidationRule.NAME_PATTERN, UserValidationMessage.NAME_WRONG)
+    .required(UserValidationMessage.NAME_REQUIRE),
+  lastName: string()
     .min(
       UserValidationRule.NAME_MIN_LENGTH,
       UserValidationMessage.NAME_MIN_LENGTH,

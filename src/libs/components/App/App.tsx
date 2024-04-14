@@ -1,27 +1,35 @@
-import { Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import * as authActions from '../../slices/authSlice';
+import { DataStatus } from '../../types';
+import { Loader } from '../Loader';
 
-import { MainPage, HomePage, AccountLayout } from '../../pages';
+export const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { user, authRequestStatus } = useAppSelector(state => state.auth);
 
-export const App = () => {
-  return (
-    <Routes>
-      <Route path="/">
-        <Route
-          index
-          element={<MainPage />}
-        />
-        <Route
-          path="/"
-          element={<AccountLayout />}
-        >
-          <Route
-            path="home"
-            element={<HomePage />}
-          />
-        </Route>
-      </Route>
-    </Routes>
+  const isLoading = !(
+    authRequestStatus === DataStatus.FULFILLED ||
+    authRequestStatus === DataStatus.REJECTED
+  );
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(authActions.getCurrentUser());
+    }
+  }, [user, dispatch]);
+
+  return isLoading ? (
+    <div
+      style={{
+        width: '100vw',
+        height: '100vh',
+      }}
+    >
+      <Loader />
+    </div>
+  ) : (
+    <Outlet />
   );
 };
-
-export default App;
