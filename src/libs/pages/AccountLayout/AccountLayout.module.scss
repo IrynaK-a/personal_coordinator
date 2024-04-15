@@ -169,6 +169,7 @@
 }
 
 .contentContainer {
+  position: relative;
   flex-grow: 1;
   height: calc(100% - $menu-height-mobile);
   padding: $content-padding-top-mobile $content-padding-inline-mobile $content-padding-bottom;
@@ -188,4 +189,32 @@
 .content {
   height: 100%;
   overflow-y: auto;
+}
+
+.addButton{
+  @include flexbox-center;
+  @include buttons-text;
+  @include button-hover;
+
+  position: absolute;
+  right: 2 * $content-padding-inline-mobile;
+  bottom: 1.5 * $content-padding-bottom;
+  padding: 15px 20px;
+  color: $white;
+  font-size: 24px;
+  background-color: $icons;
+  border-radius: 50%;
+  box-shadow: 1px 1px 1px $shadow-color;
+  
+
+  @include on-big-screens {
+    right: 2.5 * $content-padding-inline-desktop;
+    bottom: 1.5 * $content-padding-bottom;
+    padding: 25px 30px;
+  }
+
+  @include on-tablet {
+    right: 1.5 * $content-padding-inline-desktop;
+    padding: 20px 25px;
+  }
 }

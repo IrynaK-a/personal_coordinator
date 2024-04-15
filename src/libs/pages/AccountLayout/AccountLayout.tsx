@@ -1,6 +1,6 @@
 import cn from 'classnames';
 
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks';
 import { ACCOUNT_MENU_ITEMS } from '../../constants';
 import { LogoIcon, LogoText } from '../../components';
@@ -19,6 +19,8 @@ type Props = {
 export const AccountLayout: React.FC<Props> = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const isMyCoursesPage = location.pathname === AppRoute.COURSES;
 
   const handleLogout = () => {
     navigate(AppRoute.ROOT);
@@ -78,6 +80,14 @@ export const AccountLayout: React.FC<Props> = ({ children }) => {
 
         <div className={styles.contentContainer}>
           <div className={styles.content}>{children}</div>
+          {isMyCoursesPage && (
+            <Link
+              to={AppRoute.CREATE_COURSE}
+              className={styles.addButton}
+            >
+              +
+            </Link>
+          )}
         </div>
       </div>
     </div>

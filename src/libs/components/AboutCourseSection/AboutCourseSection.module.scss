@@ -1,0 +1,71 @@
+@import '/src/assets/css/variables';
+@import '/src/assets/css/mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  @include h2;
+
+  color: $primary;
+  transition: all 0.3s;
+
+  &:hover {
+    color: $main-accent;
+  }
+}
+
+.deleteButton {
+  padding: 0;
+}
+
+.deleteIcon {
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s;
+
+  @include on-big-screens {
+    width: 28px;
+    height: 28px;
+  }
+
+  &:hover > * {
+    fill: $primary;
+  }
+}
+
+.link {
+  @include small-text;
+
+  width: max-content;
+  padding-right: 15px;
+  color: $second-accent;
+  transition: all 0.3s;
+
+  &:hover {
+    color: $primary;
+  }
+
+  @include on-big-screens {
+    @include body-text;
+
+    color: $second-accent;
+  }
+}
+
+.startDay {
+  @include small-text;
+
+  @include on-big-screens {
+    @include body-text;
+  }
+}

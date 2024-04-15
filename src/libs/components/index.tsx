@@ -11,3 +11,4 @@ export { ProtectedRoute } from './ProtectedRoute';
 export { PublicRoute } from './PublicRoute';
 export { router } from './Router';
 export { Loader } from './Loader';
+export { MyCourseCard } from './MyCourseCard';
