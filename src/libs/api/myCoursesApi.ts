@@ -40,3 +40,39 @@ export const deleteCourse = async (id: number) => {
 
   return data;
 };
+
+export const changeCourse = async (course: ICourse) => {
+  const token = localStorage.getItem(StorageKey.TOKEN);
+
+  if (!token) {
+    window.location.reload();
+    return null;
+  }
+
+  const { data } = await coursesFetch.patch<ICourse[]>(`${course.id}`, course, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return data;
+};
+
+export const createCourse = async (
+  course: Pick<ICourse, 'link' | 'name' | 'image' | 'description'>,
+) => {
+  const token = localStorage.getItem(StorageKey.TOKEN);
+
+  if (!token) {
+    window.location.reload();
+    return null;
+  }
+
+  const { data } = await coursesFetch.post<ICourse[]>(`add`, course, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return data;
+};

@@ -3,8 +3,10 @@
 import { Link } from 'react-router-dom';
 import { AboutCourseSection } from '../AboutCourseSection/AboutCourseSection';
 
+import { ICourse, TaskStatus } from '../../types';
+import { useAppDispatch } from '../../app/hooks';
+import * as coursesActions from '../../slices/coursesSlice';
 import styles from './MyCourseCard.module.scss';
-import { ICourse } from '../../types';
 
 type Props = {
   course: ICourse;
@@ -12,6 +14,12 @@ type Props = {
 
 export const MyCourseCard: React.FC<Props> = ({ course }) => {
   const { courseTasks } = course;
+  const dispatch = useAppDispatch();
+
+  const handleCheckboxClick = () => {
+    dispatch(coursesActions.deleteCourse(course.id));
+  };
+
   return (
     <div className={styles.container}>
       <AboutCourseSection course={course} />
@@ -21,7 +29,7 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
           <p className={styles.subtitle}>Tasks:</p>
 
           <ul className={styles.list}>
-            {courseTasks.map(({ taskDescription, taskId }) => (
+            {courseTasks.map(({ taskDescription, taskId, status }) => (
               <li
                 className={styles.item}
                 key={taskId}
@@ -30,7 +38,9 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
                   id={String(taskId)}
                   name={taskDescription}
                   type="checkbox"
+                  checked={status === TaskStatus.DONE}
                   className={styles.input}
+                  onClick={handleCheckboxClick}
                 />
                 <label
                   htmlFor={String(taskId)}

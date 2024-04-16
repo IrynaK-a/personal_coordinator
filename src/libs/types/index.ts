@@ -9,5 +9,7 @@ export { type UserSignInRequestDto } from './userSignInRequestDto';
 export { type IInspirationResponse } from './inspirationResponse.interface';
 export { AppRoute } from './appRoute.enum';
 export { StorageKey } from './storageKey.enum';
+export { TaskStatus } from './taskStatus.enum';
 export { type ICourse } from './course.interface';
 export { type ICourseTasks } from './courseTasks.interface';
+export { type DefaultCourse } from './defaultCourse.type';

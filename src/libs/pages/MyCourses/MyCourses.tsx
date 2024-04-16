@@ -19,7 +19,7 @@ export const MyCourses = () => {
   const hasCourses = !isLoading && !hasNoCourses && !hasError && !!courses;
 
   useEffect(() => {
-    dispatch(coursesActions.getAll());
+    dispatch(coursesActions.getAllMyCourses());
   }, [dispatch]);
 
   return (
