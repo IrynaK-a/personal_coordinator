@@ -13,3 +13,5 @@ export { TaskStatus } from './taskStatus.enum';
 export { type ICourse } from './course.interface';
 export { type ICourseTasks } from './courseTasks.interface';
 export { type DefaultCourse } from './defaultCourse.type';
+export { type ICreateCourseFormData } from './createCourseFormData.interface';
+export { type CreateCourseData } from './createCourseData';

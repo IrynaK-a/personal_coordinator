@@ -117,10 +117,14 @@
 
   padding: 10px;
   color: $secondary;
-  transition: all 0.3s;
 
   @include on-big-screens {
     padding: 0;
+  }
+
+  & > *,
+  & > * > * {
+    transition: all 0.3s;
   }
 
   &:hover > *,

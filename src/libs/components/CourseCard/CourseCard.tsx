@@ -18,13 +18,16 @@ export const CourseCard: React.FC<Props> = ({
         alt={name}
         className={styles.image}
       />
+
       <div className={styles.info}>
         <Link
           to={link}
           className={styles.link}
+          target="_blank"
         >
           <h3 className={styles.title}>{name}</h3>
         </Link>
+
         <p className={styles.description}>{description}</p>
       </div>
 

@@ -17,7 +17,7 @@
   border-radius: 20px;
 
   @include on-big-screens {
-    padding: 25px 100px 25px 60px;
+    padding: 25px 60px;
   }
 
   @include on-tablet {
