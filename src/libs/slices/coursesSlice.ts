@@ -90,7 +90,7 @@ export const { reducer, actions } = createSlice({
       state.hasError = false;
       state.myCourses =
         payload && state.myCourses
-          ? state.myCourses.filter(course => course.id !== payload.CourseId)
+          ? state.myCourses.filter(course => course.id !== payload.id)
           : state.myCourses;
     });
     builder.addCase(deleteCourse.pending, state => {

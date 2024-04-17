@@ -33,7 +33,7 @@ export const deleteCourse = async (id: number) => {
     return null;
   }
 
-  const { data } = await coursesFetch.delete<{ CourseId: number }>(`${id}`, {
+  const { data } = await coursesFetch.delete<Pick<ICourse, 'id'>>(`${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
