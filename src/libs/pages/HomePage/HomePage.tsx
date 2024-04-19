@@ -5,33 +5,26 @@ import avatar from '../../../assets/icons/avatar.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as aiActions from '../../slices/aiSlice';
 import * as coursesActions from '../../slices/coursesSlice';
-import { AppRoute, IInspirationResponse } from '../../types';
+import { AppRoute, DataStatus, IInspirationResponse } from '../../types';
 import { Loader, CourseCard } from '../../components';
 
 import style from './HomePage.module.scss';
 
 export const HomePage = () => {
   const dispatch = useAppDispatch();
-  const {
-    quote,
-    aiRequestStatus,
-    userName,
-    defaultCourses,
-    defaultCoursesRequestStatus,
-  } = useAppSelector(({ ai, auth, courses }) => ({
-    quote: ai.answer,
-    userName: auth.user,
-    aiRequestStatus: ai.aiRequestStatus,
-    defaultCourses: courses.defaultCourses,
-    defaultCoursesRequestStatus: courses.coursesRequestStatus,
-  }));
+  const { aiRequestStatus, answer: quote } = useAppSelector(state => state.ai);
+  const { user: userName } = useAppSelector(state => state.auth);
+  const { defaultCourses, defaultCoursesRequestStatus } = useAppSelector(
+    state => state.courses,
+  );
   const [inspiration, setInspiration] = useState<IInspirationResponse | null>(
     null,
   );
 
-  const isInspirationLoading = aiRequestStatus === 'pending';
-  const hasInspirationShown = aiRequestStatus !== 'idle';
-  const isDefaultCoursesLoading = defaultCoursesRequestStatus === 'pending';
+  const isInspirationLoading = aiRequestStatus === DataStatus.PENDING;
+  const hasInspirationShown = aiRequestStatus !== DataStatus.IDLE;
+  const isDefaultCoursesLoading =
+    defaultCoursesRequestStatus === DataStatus.PENDING;
 
   const getInspired = async () => {
     dispatch(aiActions.getInspired());
@@ -44,8 +37,10 @@ export const HomePage = () => {
   }, [quote]);
 
   useEffect(() => {
-    dispatch(coursesActions.getAllDefaultCourses());
-  }, [dispatch]);
+    if (!defaultCourses) {
+      dispatch(coursesActions.getAllDefaultCourses());
+    }
+  }, [dispatch, defaultCourses]);
 
   return (
     <div className={style.home}>

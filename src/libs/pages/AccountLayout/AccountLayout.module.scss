@@ -19,7 +19,6 @@
 
   @include on-big-screens {
     display: flex;
-    width: auto;
     min-width: $large;
     padding: 0 $body-padding-desktop;
   }
@@ -124,7 +123,7 @@
 
   & > *,
   & > * > * {
-    transition: all 0.3s;
+    transition: all $transiton-duration;
   }
 
   &:hover > *,
@@ -191,6 +190,7 @@
 }
 
 .content {
+  width: 100%;
   height: 100%;
   overflow-y: auto;
 }

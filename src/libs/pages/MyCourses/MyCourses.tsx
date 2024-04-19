@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Loader, MyCourseCard } from '../../components';
 import * as coursesActions from '../../slices/coursesSlice';
+import { AppRoute, DataStatus } from '../../types';
 
 import styles from './MyCourses.module.scss';
-import { AppRoute } from '../../types';
 
 export const MyCourses = () => {
   const dispatch = useAppDispatch();
@@ -13,7 +13,7 @@ export const MyCourses = () => {
     state => state.courses,
   );
 
-  const isLoading = coursesRequestStatus === 'pending';
+  const isLoading = coursesRequestStatus === DataStatus.PENDING;
   const hasNoCourses =
     (!myCourses || myCourses.length === 0) && !isLoading && !hasError;
   const hasCourses = !isLoading && !hasNoCourses && !hasError && !!myCourses;

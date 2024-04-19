@@ -59,7 +59,7 @@
   font-weight: 600;
   background-color: $primary;
   border-radius: 40px;
-  transition: all 0.3s;
+  transition: all $transiton-duration;
   
   &::after {
     content: url('../../../assets/icons/stars.svg');

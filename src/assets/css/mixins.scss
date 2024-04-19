@@ -94,14 +94,14 @@
   background-color: $main-accent;
   border: 1px solid $main-accent;
   border-radius: 50px;
-  transition: all 0.3s;
+  transition: all $transiton-duration;
 
 
   @include button-hover;
 }
 
 @mixin button-hover {
-  transition: all 0.3s;
+  transition: all $transiton-duration;
   
   &:hover {
     background-color: $primary;
