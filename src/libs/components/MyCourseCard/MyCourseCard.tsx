@@ -61,14 +61,14 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
                 <p className={styles.subtitle}>Tasks:</p>
 
                 <ul className={styles.list}>
-                  {courseTasks.map(({ taskDescription, taskId, status }) => (
+                  {courseTasks.map(({ taskName, id: taskId, status }) => (
                     <li
                       className={styles.item}
                       key={taskId}
                     >
                       <input
                         id={String(taskId)}
-                        name={taskDescription}
+                        name={taskName}
                         type="checkbox"
                         checked={status === TaskStatus.DONE}
                         className={styles.input}
@@ -78,7 +78,7 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
                         htmlFor={String(taskId)}
                         className={styles.label}
                       >
-                        {taskDescription}
+                        {taskName}
                       </label>
                     </li>
                   ))}

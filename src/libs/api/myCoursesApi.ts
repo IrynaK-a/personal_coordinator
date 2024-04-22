@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { StorageKey, ICourse, ChangeCourseData } from '../types';
-import { CreateCourseData } from '../types/createCourseData';
+import { CreateCourseData } from '../types/createCourseData.type';
 
 const BASE_API_URL = 'http://localhost:8080/api/courses/';
 
@@ -25,7 +25,7 @@ export const getAllCourses = async () => {
   return data;
 };
 
-export const deleteCourse = async (payload: number) => {
+export const deleteCourse = async (courseId: number) => {
   const token = localStorage.getItem(StorageKey.TOKEN);
 
   if (!token) {
@@ -34,7 +34,7 @@ export const deleteCourse = async (payload: number) => {
   }
 
   const { data } = await coursesFetch.delete<Pick<ICourse, 'id'>>(
-    `${payload}`,
+    `${courseId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -45,7 +45,10 @@ export const deleteCourse = async (payload: number) => {
   return data;
 };
 
-export const changeCourse = async (id: number, payload: ChangeCourseData) => {
+export const changeCourse = async (
+  courseId: number,
+  payload: ChangeCourseData,
+) => {
   const token = localStorage.getItem(StorageKey.TOKEN);
 
   if (!token) {
@@ -53,7 +56,7 @@ export const changeCourse = async (id: number, payload: ChangeCourseData) => {
     return null;
   }
 
-  const { data } = await coursesFetch.patch<ICourse>(`${id}`, payload, {
+  const { data } = await coursesFetch.patch<ICourse>(`${courseId}`, payload, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

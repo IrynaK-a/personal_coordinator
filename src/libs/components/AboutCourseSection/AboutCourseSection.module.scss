@@ -5,12 +5,15 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
   width: 100%;
   min-width: 100%;
   padding: 20px 15px;
   background-color: $white;
   border-radius: 20px;
+
+  @include on-big-screens {
+    padding: 20px;
+  }
 }
 
 .mainInfo {
@@ -18,6 +21,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-bottom: 20px;
 
   @include on-big-screens {
     gap: 50px;
@@ -61,7 +65,7 @@
 .titleContainer {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 15px;
   width: 100%;
 }
 
@@ -104,15 +108,17 @@
 
 .linkContainer {
   display: flex;
+  align-items: center;
 }
 
 .link {
   @include small-text;
 
   width: max-content;
-  padding-right: 5px;
+  padding-right: 10px;
   color: $second-accent;
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 18px;
   transition: all $transiton-duration;
 
   &:hover {
@@ -149,6 +155,7 @@
 .descriptionButton {
   @include flexbox-align-center;
 
+  margin-bottom: 10px;
   font-family: inherit;
   font-size: inherit;
   font-weight: 700;

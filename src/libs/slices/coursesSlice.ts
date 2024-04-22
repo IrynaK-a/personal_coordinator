@@ -1,10 +1,5 @@
 /* eslint-disable no-param-reassign */
-import {
-  // PayloadAction,
-  createAsyncThunk,
-  createSlice,
-  isAnyOf,
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import {
   ChangeCourseData,
   CreateCourseData,
@@ -21,6 +16,7 @@ import {
   changeCourse,
 } from '../api/myCoursesApi';
 import { getDefaultCourses } from '../api/defaultCoursesApi';
+import { createTask } from './tasksSlice';
 
 export interface ICourseState {
   coursesRequestStatus: ValueOf<typeof DataStatus>;
@@ -165,6 +161,9 @@ export const { reducer, actions } = createSlice({
     builder.addCase(changeCurrentCourse.fulfilled, (state, { payload }) => {
       state.currentCoursesRequestStatus = DataStatus.FULFILLED;
       state.hasError = false;
+      state.currentCourse = payload;
+    });
+    builder.addCase(createTask.fulfilled, (state, { payload }) => {
       state.currentCourse = payload;
     });
     builder.addCase(changeCurrentCourse.pending, state => {
