@@ -1,6 +1,6 @@
 import { ICourse } from './course.interface';
 
-export type ChangeCourseData = Pick<
+export type UpdateCourseData = Pick<
   ICourse,
   'link' | 'name' | 'status' | 'description'
 >;

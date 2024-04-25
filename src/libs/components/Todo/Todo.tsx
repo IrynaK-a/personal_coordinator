@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ICourseTasks, TaskStatus } from '../../types';
+import { useForm } from 'react-hook-form';
+import { UpdatedTaskData, ICourseTasks, TaskStatus } from '../../types';
 
 import { useAppDispatch } from '../../app/hooks';
 import * as tasksAction from '../../slices/tasksSlice';
@@ -9,21 +10,38 @@ type Props = {
   task: ICourseTasks;
 };
 
-export const Todo: React.FC<Props> = ({
-  task: { id, status, taskName: name },
-}) => {
+export const Todo: React.FC<Props> = ({ task: { id, status, taskName } }) => {
   const dispatch = useAppDispatch();
   const [isUpdatingTodoTitle, setIsUpdatingTodoTitle] = useState(false);
-  const [newTask, setNewTask] = useState(name);
 
-  const toggleChecked = () => {};
-
-  const handleFormSubmit = () => {
-    setIsUpdatingTodoTitle(false);
+  const toggleChecked = async () => {
+    await dispatch(
+      tasksAction.updateCurrentTask({
+        status:
+          status === TaskStatus.DONE ? TaskStatus.IN_PROGRESS : TaskStatus.DONE,
+        taskName,
+        id,
+      }),
+    );
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTask(e.target.value);
+  const { handleSubmit, register } = useForm<UpdatedTaskData>();
+
+  const onSubmit = async (updatedTask: UpdatedTaskData) => {
+    if (!updatedTask.taskName.trim()) {
+      setIsUpdatingTodoTitle(false);
+      return;
+    }
+
+    await dispatch(
+      tasksAction.updateCurrentTask({
+        status,
+        taskName: updatedTask.taskName.trim(),
+        id,
+      }),
+    );
+
+    setIsUpdatingTodoTitle(false);
   };
 
   const deleteCurrentTodo = () => {
@@ -41,15 +59,14 @@ export const Todo: React.FC<Props> = ({
 
       {isUpdatingTodoTitle ? (
         <form
-          onSubmit={handleFormSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className={styles.form}
+          onBlur={handleSubmit(onSubmit)}
         >
           <input
             type="text"
-            value={newTask}
-            onChange={handleTitleChange}
-            onBlur={handleFormSubmit}
             className={styles.input}
+            {...register('taskName')}
           />
         </form>
       ) : (
@@ -58,7 +75,7 @@ export const Todo: React.FC<Props> = ({
             onDoubleClick={() => setIsUpdatingTodoTitle(true)}
             className={styles.taskName}
           >
-            {name}
+            {taskName}
           </span>
 
           <button

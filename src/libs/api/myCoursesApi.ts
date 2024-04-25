@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { StorageKey, ICourse, ChangeCourseData } from '../types';
+import { StorageKey, ICourse, UpdateCourseData } from '../types';
 import { CreateCourseData } from '../types/createCourseData.type';
 
 const BASE_API_URL = 'http://localhost:8080/api/courses/';
@@ -45,9 +45,9 @@ export const deleteCourse = async (courseId: number) => {
   return data;
 };
 
-export const changeCourse = async (
+export const updateCourse = async (
   courseId: number,
-  payload: ChangeCourseData,
+  payload: UpdateCourseData,
 ) => {
   const token = localStorage.getItem(StorageKey.TOKEN);
 

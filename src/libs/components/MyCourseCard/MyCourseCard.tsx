@@ -26,8 +26,6 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
     dispatch(coursesActions.deleteCourse(id));
   };
 
-  const handleCheckboxClick = () => {};
-
   return (
     <div className={styles.container}>
       {isDeleting ? (
@@ -72,7 +70,7 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
                         type="checkbox"
                         checked={status === TaskStatus.DONE}
                         className={styles.input}
-                        onClick={handleCheckboxClick}
+                        disabled
                       />
                       <label
                         htmlFor={String(taskId)}

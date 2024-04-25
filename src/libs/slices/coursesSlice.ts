@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import {
-  ChangeCourseData,
+  UpdateCourseData,
   CreateCourseData,
   DataStatus,
   DefaultCourse,
@@ -13,7 +13,7 @@ import {
   deleteCourse as deleteCurrentCourse,
   createCourse,
   getCurrentCourse,
-  changeCourse,
+  updateCourse,
 } from '../api/myCoursesApi';
 import { getDefaultCourses } from '../api/defaultCoursesApi';
 import { createTask } from './tasksSlice';
@@ -82,16 +82,16 @@ export const getCurrent = createAsyncThunk(
   },
 );
 
-export const changeCurrentCourse = createAsyncThunk(
-  'courses/changeCurrent',
+export const updateCurrentCourse = createAsyncThunk(
+  'courses/updateCurrent',
   async ({
-    changedData,
+    updatedCourse,
     id,
   }: {
     id: number;
-    changedData: ChangeCourseData;
+    updatedCourse: UpdateCourseData;
   }) => {
-    const changedCourse = await changeCourse(id, changedData);
+    const changedCourse = await updateCourse(id, updatedCourse);
 
     return changedCourse;
   },
@@ -158,19 +158,21 @@ export const { reducer, actions } = createSlice({
       state.currentCoursesRequestStatus = DataStatus.REJECTED;
       state.hasError = true;
     });
-    builder.addCase(changeCurrentCourse.fulfilled, (state, { payload }) => {
+    builder.addCase(updateCurrentCourse.fulfilled, (state, { payload }) => {
       state.currentCoursesRequestStatus = DataStatus.FULFILLED;
       state.hasError = false;
       state.currentCourse = payload;
     });
     builder.addCase(createTask.fulfilled, (state, { payload }) => {
-      state.currentCourse = payload;
+      if (state.currentCourse && payload) {
+        state.currentCourse.courseTasks.push(payload);
+      }
     });
-    builder.addCase(changeCurrentCourse.pending, state => {
+    builder.addCase(updateCurrentCourse.pending, state => {
       state.currentCoursesRequestStatus = DataStatus.PENDING;
       state.hasError = false;
     });
-    builder.addCase(changeCurrentCourse.rejected, state => {
+    builder.addCase(updateCurrentCourse.rejected, state => {
       state.currentCoursesRequestStatus = DataStatus.REJECTED;
       state.hasError = true;
     });

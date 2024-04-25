@@ -20,6 +20,21 @@
   }
 }
 
+.input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid $main-accent;
+  outline: none;
+  
+  @include body-text;  
+  
+  @include on-big-screens {
+    @include h3;
+
+    font-weight: 400;
+  }
+}
+
 .taskName {
   @include body-text;  
   
@@ -28,7 +43,6 @@
 
     font-weight: 400;
   }
-
 }
 
 .deleteButton {

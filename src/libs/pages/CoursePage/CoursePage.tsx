@@ -24,7 +24,11 @@ export const CoursePage = () => {
 
   const isCOurseLoading = currentCoursesRequestStatus === DataStatus.PENDING;
   const hasCurrentCourse = !isCOurseLoading && currentCourse && !hasError;
-  const hasCourses = Boolean(currentCourse && currentCourse.courseTasks.length);
+  const hasCourses = Boolean(
+    currentCourse &&
+      currentCourse.courseTasks &&
+      currentCourse.courseTasks.length,
+  );
 
   const addNewTask = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) {
@@ -40,12 +44,8 @@ export const CoursePage = () => {
       taskName: newTaskTitle,
     };
 
-    try {
-      await dispatch(tasksActions.createTask(newTask));
-      setNewTaskTitle('');
-    } catch (error) {
-      console.log(error);
-    }
+    await dispatch(tasksActions.createTask(newTask));
+    setNewTaskTitle('');
   };
 
   useEffect(() => {

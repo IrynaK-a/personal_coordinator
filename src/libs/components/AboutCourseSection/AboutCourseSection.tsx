@@ -2,11 +2,13 @@
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
 import { useState } from 'react';
+
 import { ReactComponent as DeleteIcon } from '../../../assets/icons/delete.svg';
 import { ReactComponent as ChangeIcon } from '../../../assets/icons/change.svg';
-import { ICourse, UserValidationRule } from '../../types';
+import { AppRoute, UpdateCourseData, ICourse } from '../../types';
 import { useAppDispatch } from '../../app/hooks';
 import * as coursesActions from '../../slices/coursesSlice';
+
 import styles from './AboutCourseSection.module.scss';
 
 type Props = {
@@ -17,13 +19,13 @@ export const AboutCourseSection: React.FC<Props> = ({
   course: { description, id, image, link, name, startDate, status },
 }) => {
   const dispatch = useAppDispatch();
-  const [isTitleChanging, setIsTitleChanging] = useState(false);
-  const [courseTitle, setCourseTitle] = useState(name);
-  const [isLinkChanging, setIsLinkChanging] = useState(false);
-  const [courseLink, setCourseLink] = useState(link);
-  const [isDescriptionChanging, setIsDescriptionChanging] = useState(false);
-  const [courseDescription, setCourseDescription] = useState(description);
-
+  const [updatedCourse, setUpdatedCourse] = useState<UpdateCourseData>({
+    description,
+    link,
+    name,
+    status,
+  });
+  const [isChanging, setIsChanging] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
   const [validationError, setValidationError] = useState('');
 
@@ -33,109 +35,46 @@ export const AboutCourseSection: React.FC<Props> = ({
     dispatch(coursesActions.deleteCourse(id));
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValidationError('');
-    setCourseTitle(e.target.value);
-  };
-
-  const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValidationError('');
-    setCourseLink(e.target.value);
-  };
-
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValidationError('');
-    setCourseDescription(e.target.value);
-  };
-
-  const handleTitleSubmit = (
-    e: React.FocusEvent<HTMLInputElement, Element>,
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    key: keyof UpdateCourseData,
   ) => {
-    const value = e.target.value.trim();
-
-    if (value === name) {
-      setIsTitleChanging(false);
-      return;
-    }
-
-    setCourseTitle(value);
-
-    if (
-      value.length < UserValidationRule.COURSE_NAME_MIN_LENGTH ||
-      value.length > UserValidationRule.COURSE_NAME_MAX_LENGTH
-    ) {
-      setValidationError('Course name should be 2-60 characters');
-    } else {
-      setValidationError('');
-      setIsTitleChanging(false);
-      dispatch(
-        coursesActions.changeCurrentCourse({
-          id,
-          changedData: {
-            name: courseTitle,
-            description,
-            status,
-            link,
-          },
-        }),
-      );
-    }
-  };
-
-  const handleDescriptionSubmit = (
-    e: React.FocusEvent<HTMLInputElement, Element>,
-  ) => {
-    const value = e.target.value.trim();
-
-    if (value === description) {
-      setIsDescriptionChanging(false);
-      return;
-    }
-
-    setCourseDescription(value);
-
-    if (value.length > UserValidationRule.COURSE_DESCRIPTION_MAX_LENGTH) {
-      setValidationError('Course name should less than 200 characters');
-    } else {
-      setValidationError('');
-      setIsDescriptionChanging(false);
-      dispatch(
-        coursesActions.changeCurrentCourse({
-          id,
-          changedData: {
-            name,
-            description: courseDescription,
-            status,
-            link,
-          },
-        }),
-      );
-    }
-  };
-
-  const handleLinkSubmit = (e: React.FocusEvent<HTMLInputElement, Element>) => {
-    const value = e.target.value.trim();
-
-    if (value === link) {
-      setIsLinkChanging(false);
-      return;
-    }
-
-    setCourseLink(value);
-
     setValidationError('');
-    setIsLinkChanging(false);
-    dispatch(
-      coursesActions.changeCurrentCourse({
-        id,
-        changedData: {
-          name,
-          description,
-          status,
-          link: courseLink,
-        },
-      }),
-    );
+
+    setUpdatedCourse({
+      ...updatedCourse,
+      [key]: e.target.value,
+    });
+  };
+
+  const handleUpdateCourse = () => {
+    const hasNoCourseName = !updatedCourse.name.trim();
+
+    if (hasNoCourseName) {
+      setUpdatedCourse({
+        description,
+        link,
+        name,
+        status,
+      });
+      setIsChanging(false);
+
+      return;
+    }
+
+    dispatch(coursesActions.updateCurrentCourse({ id, updatedCourse }));
+  };
+
+  const handleChangeButtonClick = () => {
+    setShowDescription(true);
+    setIsChanging(true);
+  };
+
+  const handleSubmitButtonClick = () => {
+    setShowDescription(false);
+    setIsChanging(false);
+
+    handleUpdateCourse();
   };
 
   return (
@@ -146,28 +85,41 @@ export const AboutCourseSection: React.FC<Props> = ({
             [styles.textInfoGrow]: image,
           })}
         >
-          <div className={styles.titleContainer}>
-            {isTitleChanging ? (
-              <input
-                type="text"
-                value={courseTitle}
-                className={styles.titleInput}
-                onBlur={e => handleTitleSubmit(e)}
-                onChange={e => handleTitleChange(e)}
-              />
+          <div className={styles.courseManipulationContainer}>
+            {isChanging ? (
+              <>
+                <input
+                  type="text"
+                  value={updatedCourse.name}
+                  className={styles.input}
+                  onChange={e => handleChange(e, 'name')}
+                />
+                <button
+                  type="button"
+                  className={styles.submitButton}
+                  onClick={handleSubmitButtonClick}
+                >
+                  Submit
+                </button>
+              </>
             ) : (
-              <h2
-                className={styles.title}
-                onDoubleClick={() => setIsTitleChanging(true)}
-              >
-                {name}
-              </h2>
+              <div className={styles.titleContainer}>
+                <h2 className={styles.title}>{name}</h2>
+
+                <button
+                  type="button"
+                  className={styles.iconButton}
+                  onClick={handleChangeButtonClick}
+                >
+                  <ChangeIcon className={styles.changeIcon} />
+                </button>
+              </div>
             )}
             {validationError && <p>{validationError}</p>}
 
             <button
               type="button"
-              className={styles.deleteButton}
+              className={styles.iconButton}
               onClick={handleDelete}
             >
               <DeleteIcon className={styles.deleteIcon} />
@@ -175,28 +127,21 @@ export const AboutCourseSection: React.FC<Props> = ({
           </div>
 
           <div className={styles.linkContainer}>
-            {isLinkChanging ? (
+            {isChanging ? (
               <input
                 type="text"
-                value={courseLink}
-                className={styles.titleInput}
-                onBlur={e => handleLinkSubmit(e)}
-                onChange={e => handleLinkChange(e)}
+                value={updatedCourse.link}
+                className={styles.input}
+                onChange={e => handleChange(e, 'link')}
               />
             ) : (
-              <>
-                <Link
-                  to={link ?? '/my-courses'}
-                  className={styles.link}
-                >
-                  link
-                </Link>
-
-                <ChangeIcon
-                  className={styles.linkChangeButton}
-                  onClick={() => setIsLinkChanging(true)}
-                />
-              </>
+              <Link
+                to={link ?? AppRoute.MY_COURSES}
+                className={styles.link}
+                target="_blank"
+              >
+                link
+              </Link>
             )}
           </div>
 
@@ -212,32 +157,29 @@ export const AboutCourseSection: React.FC<Props> = ({
         )}
       </div>
 
-      <button
-        type="button"
-        className={cn(styles.descriptionButton, {
-          [styles.activeDescriptionButton]: showDescription,
-        })}
-        onClick={() => setShowDescription(!showDescription)}
-      >
-        Description
-      </button>
+      <div className={styles.descriptionButtonSection}>
+        <button
+          type="button"
+          className={cn(styles.descriptionButton, {
+            [styles.activeDescriptionButton]: showDescription,
+          })}
+          onClick={() => setShowDescription(!showDescription)}
+        >
+          Description
+        </button>
+      </div>
 
       {showDescription &&
-        (isDescriptionChanging ? (
+        (isChanging ? (
           <input
             type="text"
-            value={courseDescription}
-            className={styles.titleInput}
-            onBlur={e => handleDescriptionSubmit(e)}
-            onChange={e => handleDescriptionChange(e)}
+            value={updatedCourse.description}
+            className={styles.input}
+            onChange={e => handleChange(e, 'description')}
+            placeholder="Add description"
           />
         ) : (
-          <p
-            className={styles.description}
-            onDoubleClick={() => setIsDescriptionChanging(true)}
-          >
-            {description}
-          </p>
+          <p className={styles.description}>{description}</p>
         ))}
     </div>
   );

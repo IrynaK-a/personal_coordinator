@@ -62,15 +62,16 @@
   }
 }
 
-.titleContainer {
+.courseManipulationContainer {
   display: flex;
   justify-content: space-between;
   gap: 15px;
   width: 100%;
 }
 
-.titleInput {
-  color: $primary;
+.input {
+  width: 100%;
+  color: $black;
   font-family: inherit;
   font-size: 18px;
   word-break: break-all;
@@ -80,6 +81,20 @@
   padding-inline: 5px;
 }
 
+.submitButton {
+  padding: 3px 6px;
+  color: $primary;
+  font-weight: 500;
+  border: 2px solid $primary;
+  border-radius: 10px;
+  transition: all $transiton-duration;
+
+  &:hover {
+    color: $white;
+    background-color: $primary;
+  }
+}
+
 .title {
   @include h2;
 
@@ -87,8 +102,29 @@
   word-break: break-all;
 }
 
-.deleteButton {
+.titleContainer {
+  @include flexbox-center;
+
+  gap: 10px;
+}
+
+.iconButton {
   padding: 0;
+}
+
+.changeIcon {
+  width: 18px;
+  height: 18px;
+
+  @include on-big-screens {
+    width: 22px;
+    height: 22px;
+  }
+
+  &:hover > * {
+    transition: all $transiton-duration;
+    fill: $primary;
+  }
 }
 
 .deleteIcon {
@@ -152,10 +188,16 @@
   }
 }
 
+.descriptionButtonSection {
+  @include flexbox-center;
+  
+  margin-bottom: 10px;
+}
+
 .descriptionButton {
   @include flexbox-align-center;
 
-  margin-bottom: 10px;
+  margin-right: 5px;
   font-family: inherit;
   font-size: inherit;
   font-weight: 700;

@@ -15,5 +15,6 @@ export { type ICourseTasks } from './courseTasks.interface';
 export { type DefaultCourse } from './defaultCourse.type';
 export { type ICreateCourseFormData } from './createCourseFormData.interface';
 export { type CreateCourseData } from './createCourseData.type';
-export { type ChangeCourseData } from './changeCourseData.type';
+export { type UpdateCourseData } from './updateCourseData.type';
 export { type CreateTaskData } from './createTaskData.type';
+export { type UpdatedTaskData } from './changeTaskData.type';

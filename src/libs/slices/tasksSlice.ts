@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { CreateTaskData, DataStatus, ValueOf } from '../types';
-import { create, deleteTask } from '../api/tasksApi';
+import { UpdatedTaskData, CreateTaskData, DataStatus, ValueOf } from '../types';
+import { create, deleteTask, updateTask } from '../api/tasksApi';
 
 export interface ICourseState {
   createTaskRequestStatus: ValueOf<typeof DataStatus>;
@@ -32,6 +32,15 @@ export const deleteCurrentTask = createAsyncThunk(
     const deletedTask = await deleteTask(payload);
 
     return deletedTask;
+  },
+);
+
+export const updateCurrentTask = createAsyncThunk(
+  'tasks/change',
+  async (payload: UpdatedTaskData) => {
+    const updatedTask = await updateTask(payload);
+
+    return updatedTask;
   },
 );
 

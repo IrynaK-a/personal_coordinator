@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { StorageKey, CreateTaskData, ICourseTasks, ICourse } from '../types';
+import {
+  StorageKey,
+  CreateTaskData,
+  ICourseTasks,
+  UpdatedTaskData,
+} from '../types';
 
 const BASE_API_URL = 'http://localhost:8080/api/tasks/';
 
@@ -21,7 +26,7 @@ export const create = async ({ courseId, taskName }: CreateTaskData) => {
     .create({
       baseURL: API_URL,
     })
-    .post<ICourse>(
+    .post<ICourseTasks>(
       `${courseId}`,
       { name: taskName },
       {
@@ -30,6 +35,27 @@ export const create = async ({ courseId, taskName }: CreateTaskData) => {
         },
       },
     );
+
+  return data;
+};
+
+export const updateTask = async ({ status, taskName, id }: UpdatedTaskData) => {
+  const token = localStorage.getItem(StorageKey.TOKEN);
+
+  if (!token) {
+    window.location.reload();
+    return null;
+  }
+
+  const { data } = await axios.patch<ICourseTasks>(
+    `${id}`,
+    { taskName, status },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
 
   return data;
 };
