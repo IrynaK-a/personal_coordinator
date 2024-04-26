@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { StorageKey, ICourse } from '../types';
-import { CreateCourseData } from '../types/createCourseData';
+import { CreateCourseData } from '../types/createCourseData.type';
 
 const BASE_API_URL = 'http://localhost:8080/api/courses/';
 

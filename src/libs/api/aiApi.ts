@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { IInspirationResponse } from '../types';
+import { FindCoursesResponse, IInspirationResponse } from '../types';
 
 const inspirationPrompt =
   // eslint-disable-next-line max-len
@@ -19,4 +19,10 @@ export const getInspiraton = async () => {
   return JSON.parse(answer) as IInspirationResponse;
 };
 
-export const getCourses = (payload: string) => payload;
+export const getCourses = async (prompt: string) => {
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const answer = response.text();
+
+  return JSON.parse(answer) as FindCoursesResponse;
+};

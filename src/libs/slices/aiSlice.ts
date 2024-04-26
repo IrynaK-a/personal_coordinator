@@ -23,8 +23,9 @@ export const getInspired = createAsyncThunk('ai/inspiration', async () => {
 
 export const getCourses = createAsyncThunk(
   'ai/courses',
-  async (payload: string) => {
-    const answer = await aiApi.getCourses(payload);
+  async (payload: {}) => {
+    const prompt = `Provide 5 links to the course that are suitable for person who want to learn ${payload}`;
+    const answer = await aiApi.getCourses(prompt);
 
     return answer;
   },
@@ -36,14 +37,11 @@ export const { reducer, actions } = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addMatcher(
-        isAnyOf(getInspired.fulfilled, getCourses.fulfilled),
-        (state, { payload }) => {
-          state.aiRequestStatus = DataStatus.FULFILLED;
-          state.hasError = false;
-          state.answer = payload;
-        },
-      )
+      .addMatcher(isAnyOf(getInspired.fulfilled), (state, { payload }) => {
+        state.aiRequestStatus = DataStatus.FULFILLED;
+        state.hasError = false;
+        state.answer = payload;
+      })
       .addMatcher(isAnyOf(getInspired.pending, getCourses.pending), state => {
         state.aiRequestStatus = DataStatus.PENDING;
         state.hasError = false;

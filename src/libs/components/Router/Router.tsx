@@ -1,7 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AppRoute } from '../../types';
 import { App } from '../App';
-import { CreateCourse, HomePage, LandingPage, MyCourses } from '../../pages';
+import {
+  CreateCourse,
+  FindCourse,
+  HomePage,
+  LandingPage,
+  MyCourses,
+} from '../../pages';
 import { PublicRoute } from '../PublicRoute';
 import { ProtectedRoute } from '../ProtectedRoute';
 
@@ -39,6 +45,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <CreateCourse />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: AppRoute.FIND_COURSES_FORM,
+        element: (
+          <ProtectedRoute>
+            <FindCourse />
           </ProtectedRoute>
         ),
       },
