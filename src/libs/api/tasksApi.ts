@@ -2,8 +2,9 @@ import axios from 'axios';
 import {
   StorageKey,
   CreateTaskData,
-  ICourseTasks,
+  ICourseTask,
   UpdatedTaskData,
+  DeleteTaskData,
 } from '../types';
 
 const BASE_API_URL = 'http://localhost:8080/api/tasks/';
@@ -26,7 +27,7 @@ export const create = async ({ courseId, taskName }: CreateTaskData) => {
     .create({
       baseURL: API_URL,
     })
-    .post<ICourseTasks>(
+    .post<ICourseTask>(
       `${courseId}`,
       { name: taskName },
       {
@@ -44,10 +45,11 @@ export const updateTask = async ({ status, taskName, id }: UpdatedTaskData) => {
 
   if (!token) {
     window.location.reload();
+
     return null;
   }
 
-  const { data } = await axios.patch<ICourseTasks>(
+  const { data } = await tasksFetch.patch<ICourseTask>(
     `${id}`,
     { taskName, status },
     {
@@ -60,7 +62,7 @@ export const updateTask = async ({ status, taskName, id }: UpdatedTaskData) => {
   return data;
 };
 
-export const deleteTask = async (taskId: number) => {
+export const deleteTask = async ({ courseId, id }: DeleteTaskData) => {
   const token = localStorage.getItem(StorageKey.TOKEN);
 
   if (!token) {
@@ -68,8 +70,8 @@ export const deleteTask = async (taskId: number) => {
     return null;
   }
 
-  const { data } = await tasksFetch.delete<Pick<ICourseTasks, 'id'>>(
-    `${taskId}`,
+  const { data } = await tasksFetch.delete<Pick<ICourseTask, 'id'>>(
+    `${id}/${courseId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

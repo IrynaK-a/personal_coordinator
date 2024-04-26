@@ -1,15 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import { useState } from 'react';
 
 import { ReactComponent as DeleteIcon } from '../../../assets/icons/delete.svg';
 import { ReactComponent as ChangeIcon } from '../../../assets/icons/change.svg';
 import { AppRoute, UpdateCourseData, ICourse } from '../../types';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as coursesActions from '../../slices/coursesSlice';
 
 import styles from './AboutCourseSection.module.scss';
+import { createCourseSchema } from '../../validationSchemas/createCourseSchema';
 
 type Props = {
   course: ICourse;
@@ -19,6 +20,7 @@ export const AboutCourseSection: React.FC<Props> = ({
   course: { description, id, image, link, name, startDate, status },
 }) => {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector(state => state.auth);
   const [updatedCourse, setUpdatedCourse] = useState<UpdateCourseData>({
     description,
     link,
@@ -28,11 +30,15 @@ export const AboutCourseSection: React.FC<Props> = ({
   const [isChanging, setIsChanging] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
   const [validationError, setValidationError] = useState('');
-
+  const navigate = useNavigate();
   const date = new Date(startDate).toLocaleDateString('uk-UA');
 
-  const handleDelete = () => {
-    dispatch(coursesActions.deleteCourse(id));
+  const handleDelete = async () => {
+    await dispatch(coursesActions.deleteCourse(id));
+
+    if (user) {
+      navigate(AppRoute.MY_COURSES);
+    }
   };
 
   const handleChange = (
@@ -47,10 +53,11 @@ export const AboutCourseSection: React.FC<Props> = ({
     });
   };
 
-  const handleUpdateCourse = () => {
-    const hasNoCourseName = !updatedCourse.name.trim();
-
-    if (hasNoCourseName) {
+  const handleUpdateCourse = async () => {
+    try {
+      await createCourseSchema.validate(updatedCourse);
+      dispatch(coursesActions.updateCurrentCourse({ id, updatedCourse }));
+    } catch (error) {
       setUpdatedCourse({
         description,
         link,
@@ -58,11 +65,7 @@ export const AboutCourseSection: React.FC<Props> = ({
         status,
       });
       setIsChanging(false);
-
-      return;
     }
-
-    dispatch(coursesActions.updateCurrentCourse({ id, updatedCourse }));
   };
 
   const handleChangeButtonClick = () => {

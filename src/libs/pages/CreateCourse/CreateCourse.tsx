@@ -14,7 +14,7 @@ import {
   ICreateCourseFormData,
 } from '../../types';
 import { createCourseSchema } from '../../validationSchemas/createCourseSchema';
-import * as coursesActrions from '../../slices/coursesSlice';
+import * as coursesActions from '../../slices/coursesSlice';
 
 import styles from './CreateCourse.module.scss';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -47,8 +47,7 @@ export const CreateCourse = () => {
     };
 
     try {
-      dispatch(coursesActrions.actions.setNoMyCourses());
-      await dispatch(coursesActrions.create(newCourse));
+      await dispatch(coursesActions.createNewCourse(newCourse));
       navigate(AppRoute.MY_COURSES);
     } catch (error) {
       console.error(error);

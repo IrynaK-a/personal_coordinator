@@ -26,6 +26,8 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
     dispatch(coursesActions.deleteCourse(id));
   };
 
+  const visibleTasks = courseTasks.slice(0, 2);
+
   return (
     <div className={styles.container}>
       {isDeleting ? (
@@ -59,7 +61,7 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
                 <p className={styles.subtitle}>Tasks:</p>
 
                 <ul className={styles.list}>
-                  {courseTasks.map(({ taskName, id: taskId, status }) => (
+                  {visibleTasks.map(({ taskName, id: taskId, status }) => (
                     <li
                       className={styles.item}
                       key={taskId}

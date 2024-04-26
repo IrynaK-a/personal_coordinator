@@ -16,7 +16,6 @@ import {
   updateCourse,
 } from '../api/myCoursesApi';
 import { getDefaultCourses } from '../api/defaultCoursesApi';
-import { createTask } from './tasksSlice';
 
 export interface ICourseState {
   coursesRequestStatus: ValueOf<typeof DataStatus>;
@@ -64,7 +63,7 @@ export const deleteCourse = createAsyncThunk(
   },
 );
 
-export const create = createAsyncThunk(
+export const createNewCourse = createAsyncThunk(
   'courses/create',
   async (payload: CreateCourseData) => {
     const newCourse = await createCourse(payload);
@@ -100,18 +99,14 @@ export const updateCurrentCourse = createAsyncThunk(
 export const { reducer, actions } = createSlice({
   initialState,
   name: 'courses',
-  reducers: {
-    setNoMyCourses: state => {
-      state.myCourses = null;
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder.addCase(getAllMyCourses.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;
       state.hasError = false;
       state.myCourses = payload;
     });
-    builder.addCase(create.fulfilled, (state, { payload }) => {
+    builder.addCase(createNewCourse.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;
       state.hasError = false;
       state.currentCourse = payload;
@@ -163,11 +158,6 @@ export const { reducer, actions } = createSlice({
       state.hasError = false;
       state.currentCourse = payload;
     });
-    builder.addCase(createTask.fulfilled, (state, { payload }) => {
-      if (state.currentCourse && payload) {
-        state.currentCourse.courseTasks.push(payload);
-      }
-    });
     builder.addCase(updateCurrentCourse.pending, state => {
       state.currentCoursesRequestStatus = DataStatus.PENDING;
       state.hasError = false;
@@ -177,14 +167,14 @@ export const { reducer, actions } = createSlice({
       state.hasError = true;
     });
     builder.addMatcher(
-      isAnyOf(getAllMyCourses.rejected, create.rejected),
+      isAnyOf(getAllMyCourses.rejected, createNewCourse.rejected),
       state => {
         state.coursesRequestStatus = DataStatus.REJECTED;
         state.hasError = true;
       },
     );
     builder.addMatcher(
-      isAnyOf(getAllMyCourses.pending, create.pending),
+      isAnyOf(getAllMyCourses.pending, createNewCourse.pending),
       state => {
         state.coursesRequestStatus = DataStatus.PENDING;
         state.hasError = false;

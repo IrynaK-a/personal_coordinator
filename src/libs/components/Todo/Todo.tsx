@@ -1,16 +1,20 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { UpdatedTaskData, ICourseTasks, TaskStatus } from '../../types';
+import { UpdatedTaskData, ICourseTask, TaskStatus } from '../../types';
 
 import { useAppDispatch } from '../../app/hooks';
 import * as tasksAction from '../../slices/tasksSlice';
 import styles from './Todo.module.scss';
 
 type Props = {
-  task: ICourseTasks;
+  task: ICourseTask;
+  currentCourseId: number;
 };
 
-export const Todo: React.FC<Props> = ({ task: { id, status, taskName } }) => {
+export const Todo: React.FC<Props> = ({
+  task: { id, status, taskName },
+  currentCourseId,
+}) => {
   const dispatch = useAppDispatch();
   const [isUpdatingTodoTitle, setIsUpdatingTodoTitle] = useState(false);
 
@@ -45,7 +49,12 @@ export const Todo: React.FC<Props> = ({ task: { id, status, taskName } }) => {
   };
 
   const deleteCurrentTodo = () => {
-    dispatch(tasksAction.deleteCurrentTask(id));
+    dispatch(
+      tasksAction.deleteCurrentTask({
+        id,
+        courseId: currentCourseId,
+      }),
+    );
   };
 
   return (

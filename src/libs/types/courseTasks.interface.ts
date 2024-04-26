@@ -1,7 +1,7 @@
 import { TaskStatus } from './taskStatus.enum';
 import { ValueOf } from './valueOf.type';
 
-export interface ICourseTasks {
+export interface ICourseTask {
   id: number;
   courseId: number;
   taskName: string;

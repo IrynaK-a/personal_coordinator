@@ -1,3 +1,3 @@
-import { ICourseTasks } from './courseTasks.interface';
+import { ICourseTask } from './courseTasks.interface';
 
-export type UpdatedTaskData = Pick<ICourseTasks, 'taskName' | 'status' | 'id'>;
+export type UpdatedTaskData = Pick<ICourseTask, 'taskName' | 'status' | 'id'>;
