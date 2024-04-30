@@ -3,4 +3,4 @@ export { LandingPage } from './LandingPage';
 export { AccountLayout } from './AccountLayout';
 export { MyCourses } from './MyCourses';
 export { CreateCourse } from './CreateCourse';
-export { FindCourse } from './FindCourse';
+export { FindCoursePage } from './FindCoursePage';

@@ -1,18 +1,32 @@
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
-import { DataStatus, IInspirationResponse, ValueOf } from '../types';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  DataStatus,
+  FindCoursesResponse,
+  IFindCourseFormData,
+  IInspirationResponse,
+  ValueOf,
+} from '../types';
+import { FIND_COURSES_FORM_DATA } from '../constants';
 import * as aiApi from '../api/aiApi';
+import { getArrayFromAIAnswer } from '../utils/getArrayFromAIAnswer';
 
 export interface IAIState {
-  aiRequestStatus: ValueOf<typeof DataStatus>;
-  hasError: boolean;
-  answer: IInspirationResponse | string | null;
+  aiInspirationRequestStatus: ValueOf<typeof DataStatus>;
+  aiCoursesRequestStatus: ValueOf<typeof DataStatus>;
+  hasInspirationError: boolean;
+  hasCoursesError: boolean;
+  inspirationQuote: IInspirationResponse | null;
+  findedCourses: FindCoursesResponse | null;
 }
 
 const initialState: IAIState = {
-  aiRequestStatus: DataStatus.IDLE,
-  hasError: false,
-  answer: null,
+  aiInspirationRequestStatus: DataStatus.IDLE,
+  aiCoursesRequestStatus: DataStatus.IDLE,
+  hasInspirationError: false,
+  hasCoursesError: false,
+  inspirationQuote: null,
+  findedCourses: null,
 };
 
 export const getInspired = createAsyncThunk('ai/inspiration', async () => {
@@ -23,11 +37,22 @@ export const getInspired = createAsyncThunk('ai/inspiration', async () => {
 
 export const getCourses = createAsyncThunk(
   'ai/courses',
-  async (payload: {}) => {
-    const prompt = `Provide 5 links to the course that are suitable for person who want to learn ${payload}`;
+  async (payload: IFindCourseFormData) => {
+    const prompt = `Provide 5 links to the courses that are available in 2024th year and are suitable for the person based on the next answers:
+    question: ${FIND_COURSES_FORM_DATA[0].label}, answer: ${payload.about};
+    question: ${FIND_COURSES_FORM_DATA[1].label}, answer: ${payload.teacher};
+    question: ${FIND_COURSES_FORM_DATA[2].label}, answer: ${payload.schedule};
+    question: ${FIND_COURSES_FORM_DATA[3].label}, answer: ${payload.format};
+    question: ${FIND_COURSES_FORM_DATA[4].label}, answer: ${payload.price}; 
+    If link is not available get link to the https://www.coursera.org/.
+    Return the result in JSON format. Each object has a name, description, link and image key.
+    The value of a key "name" should have max 60 characters, the value of a key "description" should have max 200 characters, the value of a key "link" should be a link to the course page or where it can be found, the value of a key "image" should be a https://cdn-icons-png.flaticon.com/512/4762/4762232.png`;
+
     const answer = await aiApi.getCourses(prompt);
 
-    return answer;
+    const courses = getArrayFromAIAnswer(answer);
+
+    return courses;
   },
 );
 
@@ -37,18 +62,31 @@ export const { reducer, actions } = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addMatcher(isAnyOf(getInspired.fulfilled), (state, { payload }) => {
-        state.aiRequestStatus = DataStatus.FULFILLED;
-        state.hasError = false;
-        state.answer = payload;
+      .addCase(getInspired.fulfilled, (state, { payload }) => {
+        state.aiInspirationRequestStatus = DataStatus.FULFILLED;
+        state.hasInspirationError = false;
+        state.inspirationQuote = payload;
       })
-      .addMatcher(isAnyOf(getInspired.pending, getCourses.pending), state => {
-        state.aiRequestStatus = DataStatus.PENDING;
-        state.hasError = false;
+      .addCase(getInspired.pending, state => {
+        state.aiInspirationRequestStatus = DataStatus.PENDING;
+        state.hasInspirationError = false;
       })
-      .addMatcher(isAnyOf(getInspired.rejected, getCourses.rejected), state => {
-        state.aiRequestStatus = DataStatus.REJECTED;
-        state.hasError = true;
+      .addCase(getInspired.rejected, state => {
+        state.aiInspirationRequestStatus = DataStatus.REJECTED;
+        state.hasInspirationError = true;
+      })
+      .addCase(getCourses.fulfilled, (state, { payload }) => {
+        state.aiCoursesRequestStatus = DataStatus.FULFILLED;
+        state.hasCoursesError = false;
+        state.findedCourses = payload;
+      })
+      .addCase(getCourses.pending, state => {
+        state.aiCoursesRequestStatus = DataStatus.PENDING;
+        state.hasCoursesError = false;
+      })
+      .addCase(getCourses.rejected, state => {
+        state.aiCoursesRequestStatus = DataStatus.REJECTED;
+        state.hasCoursesError = true;
       });
   },
 });

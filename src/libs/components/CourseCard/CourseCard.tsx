@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import courseImage from '../../../assets/icons/tasks.svg';
 
 import styles from './CourseCard.module.scss';
-import { DefaultCourse } from '../../types';
+import { IDefaultCourse } from '../../types';
 
 type Props = {
-  course: DefaultCourse;
+  course: IDefaultCourse;
 };
 
 export const CourseCard: React.FC<Props> = ({

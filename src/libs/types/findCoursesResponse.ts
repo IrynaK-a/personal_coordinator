@@ -1,7 +1,3 @@
-export interface IFindedCourse {
-  name: string;
-  description: string;
-  link: string;
-}
+import { IDefaultCourse } from './defaultCourse.interface';
 
-export type FindCoursesResponse = IFindedCourse[];
+export type FindCoursesResponse = IDefaultCourse[];
