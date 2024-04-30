@@ -17,7 +17,7 @@ export interface IAIState {
   hasInspirationError: boolean;
   hasCoursesError: boolean;
   inspirationQuote: IInspirationResponse | null;
-  findedCourses: FindCoursesResponse | null;
+  foundedCourses: FindCoursesResponse | null;
 }
 
 const initialState: IAIState = {
@@ -26,7 +26,7 @@ const initialState: IAIState = {
   hasInspirationError: false,
   hasCoursesError: false,
   inspirationQuote: null,
-  findedCourses: null,
+  foundedCourses: null,
 };
 
 export const getInspired = createAsyncThunk('ai/inspiration', async () => {
@@ -59,7 +59,13 @@ export const getCourses = createAsyncThunk(
 export const { reducer, actions } = createSlice({
   initialState,
   name: 'ai',
-  reducers: {},
+  reducers: {
+    setNoFoundedCourses(state) {
+      state.foundedCourses = null;
+      state.aiCoursesRequestStatus = DataStatus.IDLE;
+      state.hasCoursesError = false;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getInspired.fulfilled, (state, { payload }) => {
@@ -78,7 +84,7 @@ export const { reducer, actions } = createSlice({
       .addCase(getCourses.fulfilled, (state, { payload }) => {
         state.aiCoursesRequestStatus = DataStatus.FULFILLED;
         state.hasCoursesError = false;
-        state.findedCourses = payload;
+        state.foundedCourses = payload;
       })
       .addCase(getCourses.pending, state => {
         state.aiCoursesRequestStatus = DataStatus.PENDING;

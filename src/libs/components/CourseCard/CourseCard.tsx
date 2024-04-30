@@ -1,8 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import courseImage from '../../../assets/icons/tasks.svg';
 
+import { AppRoute, IDefaultCourse } from '../../types';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import * as coursesActions from '../../slices/coursesSlice';
+
 import styles from './CourseCard.module.scss';
-import { IDefaultCourse } from '../../types';
 
 type Props = {
   course: IDefaultCourse;
@@ -11,6 +14,24 @@ type Props = {
 export const CourseCard: React.FC<Props> = ({
   course: { description, name, image = courseImage, link },
 }) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { user } = useAppSelector(state => state.auth);
+  const handleAddToMyCourses = async () => {
+    await dispatch(
+      coursesActions.create({
+        link,
+        name,
+        description,
+        image,
+      }),
+    );
+
+    if (user) {
+      navigate(AppRoute.MY_COURSES);
+    }
+  };
+
   return (
     <div className={styles.card}>
       <img
@@ -34,6 +55,7 @@ export const CourseCard: React.FC<Props> = ({
       <button
         type="button"
         className={styles.button}
+        onClick={handleAddToMyCourses}
       >
         +
       </button>

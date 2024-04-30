@@ -16,14 +16,14 @@ export const CoursesSections: React.FC<Props> = ({ showDefault = false }) => {
   const { defaultCourses, coursesRequestStatus } = useAppSelector(
     state => state.courses,
   );
-  const { aiCoursesRequestStatus, findedCourses } = useAppSelector(
+  const { aiCoursesRequestStatus, foundedCourses } = useAppSelector(
     state => state.ai,
   );
 
   const isCoursesLoading = showDefault
     ? coursesRequestStatus === DataStatus.PENDING
     : aiCoursesRequestStatus === DataStatus.PENDING;
-  const courses = showDefault ? defaultCourses : findedCourses;
+  const courses = showDefault ? defaultCourses : foundedCourses;
 
   useEffect(() => {
     dispatch(coursesActions.getAllDefaultCourses());
