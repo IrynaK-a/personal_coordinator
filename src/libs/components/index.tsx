@@ -14,3 +14,7 @@ export { Loader } from './Loader';
 export { MyCourseCard } from './MyCourseCard';
 export { Todo } from './Todo';
 export { CreateTaskBar } from './CreateTaskBar';
+export { FindCourseButton } from './FindCourseButton';
+export { FindCourseForm } from './FindCourseForm';
+export { CoursesSections } from './CoursesSections';
+export { FindCourseMessageContainer } from './FindCourseMessageContainer';

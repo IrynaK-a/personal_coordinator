@@ -1,15 +1,16 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AppRoute } from '../../types';
 import { App } from '../App';
+import { PublicRoute } from '../PublicRoute';
+import { ProtectedRoute } from '../ProtectedRoute';
 import {
   CoursePage,
   CreateCourse,
+  FindCoursePage,
   HomePage,
   LandingPage,
   MyCourses,
 } from '../../pages';
-import { PublicRoute } from '../PublicRoute';
-import { ProtectedRoute } from '../ProtectedRoute';
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <CoursePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: AppRoute.FIND_COURSES,
+        element: (
+          <ProtectedRoute>
+            <FindCoursePage />
           </ProtectedRoute>
         ),
       },

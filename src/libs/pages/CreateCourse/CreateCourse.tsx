@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-// import { useState } from 'react';
 import cn from 'classnames';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -48,7 +47,9 @@ export const CreateCourse = () => {
 
     try {
       await dispatch(coursesActions.createNewCourse(newCourse));
-      navigate(AppRoute.MY_COURSES);
+      if (coursesRequestStatus === DataStatus.FULFILLED) {
+        navigate(AppRoute.MY_COURSES);
+      }
     } catch (error) {
       console.error(error);
     }

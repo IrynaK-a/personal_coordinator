@@ -60,7 +60,6 @@
 
   &:focus {
     border: 1px solid $icons;
-    outline: none;
   }
 
   @include on-big-screens {
