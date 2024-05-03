@@ -9,4 +9,7 @@ export const UserValidationRule = {
   NAME_PATTERN: /^[ A-Za-z-]+$/,
   NAME_MIN_LENGTH: 2,
   NAME_MAX_LENGTH: 64,
+  COURSE_NAME_MIN_LENGTH: 2,
+  COURSE_NAME_MAX_LENGTH: 60,
+  COURSE_DESCRIPTION_MAX_LENGTH: 100,
 } as const;

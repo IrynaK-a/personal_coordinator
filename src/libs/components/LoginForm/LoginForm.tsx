@@ -36,7 +36,6 @@ export const LoginForm = () => {
     <StyledEngineProvider injectFirst>
       <form
         className={styles.form}
-        autoComplete="off"
         onSubmit={handleSubmit(onSubmit)}
       >
         <input

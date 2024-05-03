@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { StorageKey, ICourse } from '../types';
+import { CreateCourseData } from '../types/createCourseData';
 
 const BASE_API_URL = 'http://localhost:8080/api/courses/';
 
@@ -32,7 +33,7 @@ export const deleteCourse = async (id: number) => {
     return null;
   }
 
-  const { data } = await coursesFetch.delete<ICourse[]>(`${id}`, {
+  const { data } = await coursesFetch.delete<Pick<ICourse, 'id'>>(`${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -57,10 +58,7 @@ export const changeCourse = async (course: ICourse) => {
 
   return data;
 };
-
-export const createCourse = async (
-  course: Pick<ICourse, 'link' | 'name' | 'image' | 'description'>,
-) => {
+export const createCourse = async (course: CreateCourseData) => {
   const token = localStorage.getItem(StorageKey.TOKEN);
 
   if (!token) {
@@ -68,7 +66,7 @@ export const createCourse = async (
     return null;
   }
 
-  const { data } = await coursesFetch.post<ICourse[]>(`add`, course, {
+  const { data } = await coursesFetch.post<ICourse>('add', course, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

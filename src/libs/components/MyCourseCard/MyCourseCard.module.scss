@@ -6,16 +6,74 @@
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: 20px 15px;
+  padding: 15px;
   background-color: $white;
   border-radius: 20px;
+  transition: all 0.3s;
 
   @include on-big-screens {
-    padding: 30px 50px 10px;
+    padding: 20px 50px;
   }
 
   @include on-tablet {
-    padding: 20px 20px 10px;
+    padding: 10px 20px;
+  }
+
+  &:hover{
+    box-shadow: 0 3px 7px 0 $shadow-color;
+  }
+}
+
+.aboutSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  @include h2;
+
+  color: $primary;
+  transition: all 0.3s;
+
+  &:hover {
+    color: $main-accent;
+  }
+}
+
+.deleteButton {
+  padding: 0;
+}
+
+.deleteIcon {
+  width: 24px;
+  height: 24px;
+
+  @include on-big-screens {
+    width: 28px;
+    height: 28px;
+  }
+
+  & > * {
+    transition: all 0.3s;
+  }
+
+  &:hover > * {
+    fill: $primary;
+  }
+}
+
+.startDay {
+  @include small-text;
+
+  @include on-big-screens {
+    @include body-text;
   }
 }
 
@@ -70,5 +128,5 @@
     margin-left: 5px;
     text-align: center;
     content: url("../../../assets//icons/arrow-right_accent.svg");
-  }
+  } 
 }

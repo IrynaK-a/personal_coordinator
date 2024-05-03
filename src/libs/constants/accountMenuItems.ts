@@ -9,7 +9,7 @@ export const ACCOUNT_MENU_ITEMS = {
     icon: Home,
   },
   Tasks: {
-    path: '/courses',
+    path: '/my-courses',
     label: 'My courses',
     icon: Courses,
   },

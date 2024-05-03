@@ -44,7 +44,6 @@ export const RegistrationForm = () => {
       <form
         className={styles.form}
         onSubmit={handleSubmit(onSubmit)}
-        autoComplete="off"
       >
         <input
           id="firstName"

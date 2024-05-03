@@ -9,14 +9,14 @@ import { AppRoute } from '../../types';
 
 export const MyCourses = () => {
   const dispatch = useAppDispatch();
-  const { courses, coursesRequestStatus, hasError } = useAppSelector(
+  const { myCourses, coursesRequestStatus, hasError } = useAppSelector(
     state => state.courses,
   );
 
   const isLoading = coursesRequestStatus === 'pending';
   const hasNoCourses =
-    (!courses || courses.length === 0) && !isLoading && !hasError;
-  const hasCourses = !isLoading && !hasNoCourses && !hasError && !!courses;
+    (!myCourses || myCourses.length === 0) && !isLoading && !hasError;
+  const hasCourses = !isLoading && !hasNoCourses && !hasError && !!myCourses;
 
   useEffect(() => {
     dispatch(coursesActions.getAllMyCourses());
@@ -27,7 +27,7 @@ export const MyCourses = () => {
       {isLoading && <Loader />}
 
       {hasCourses &&
-        courses.map(course => (
+        myCourses.map(course => (
           <MyCourseCard
             course={course}
             key={course.id}

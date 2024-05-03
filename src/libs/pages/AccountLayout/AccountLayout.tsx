@@ -20,7 +20,7 @@ export const AccountLayout: React.FC<Props> = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const isMyCoursesPage = location.pathname === AppRoute.COURSES;
+  const isMyCoursesPage = location.pathname === AppRoute.MY_COURSES;
 
   const handleLogout = () => {
     navigate(AppRoute.ROOT);

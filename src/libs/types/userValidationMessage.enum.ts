@@ -13,4 +13,8 @@ export const UserValidationMessage = {
   PASSWORD_CONTENT_REQUIRE: `Password must contain at least one special character, one digit and one uppercase latin letter`,
   PASSWORD_CONFIRM_REQUIRE: 'Repeat password',
   PASSWORD_CONFIRM_WRONG: 'Passwords do not match',
+  COURSE_NAME_REQUIRE: 'The course name is required',
+  COURSE_NAME_MIN_LENGTH: `The minimal course name length - ${UserValidationRule.COURSE_NAME_MIN_LENGTH}`,
+  COURSE_NAME_MAX_LENGTH: `The maximal course name length - ${UserValidationRule.COURSE_NAME_MAX_LENGTH}`,
+  COURSE_DESCRIPTION_MAX_LENGTH: `The maximal course description length - ${UserValidationRule.COURSE_DESCRIPTION_MAX_LENGTH}`,
 } as const;

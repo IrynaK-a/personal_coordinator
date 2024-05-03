@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import avatar from '../../../assets/img/avatar-tom.jpg';
+import avatar from '../../../assets/icons/avatar.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as aiActions from '../../slices/aiSlice';
 import * as coursesActions from '../../slices/coursesSlice';
