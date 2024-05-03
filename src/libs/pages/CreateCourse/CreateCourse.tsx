@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 
+import { useEffect } from 'react';
 import {
   AppRoute,
   CreateCourseData,
@@ -13,7 +14,7 @@ import {
   ICreateCourseFormData,
 } from '../../types';
 import { createCourseSchema } from '../../validationSchemas/createCourseSchema';
-import * as coursesActrions from '../../slices/coursesSlice';
+import * as coursesActions from '../../slices/coursesSlice';
 
 import styles from './CreateCourse.module.scss';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -21,8 +22,10 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 export const CreateCourse = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { coursesRequestStatus } = useAppSelector(state => state.courses);
-
+  const { coursesRequestStatus, currentCourse } = useAppSelector(
+    state => state.courses,
+  );
+  const { user } = useAppSelector(state => state.auth);
   const isLoading = coursesRequestStatus === DataStatus.PENDING;
 
   const {
@@ -46,16 +49,14 @@ export const CreateCourse = () => {
       link,
     };
 
-    try {
-      await dispatch(coursesActrions.create(newCourse));
-
-      if (coursesRequestStatus === DataStatus.FULFILLED) {
-        navigate(AppRoute.MY_COURSES);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    await dispatch(coursesActions.createNewCourse(newCourse));
   };
+
+  useEffect(() => {
+    if (user && currentCourse) {
+      navigate(`${AppRoute.MY_COURSES}/${currentCourse.id}`);
+    }
+  }, [currentCourse, user, navigate]);
 
   return (
     <StyledEngineProvider injectFirst>

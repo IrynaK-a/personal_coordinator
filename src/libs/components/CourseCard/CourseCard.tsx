@@ -1,7 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
+import cn from 'classnames';
 import courseImage from '../../../assets/icons/tasks.svg';
 
-import { AppRoute, IDefaultCourse } from '../../types';
+import { AppRoute, ICourse, IDefaultCourse } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as coursesActions from '../../slices/coursesSlice';
 
@@ -17,9 +19,15 @@ export const CourseCard: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAppSelector(state => state.auth);
+  const { myCourses } = useAppSelector(state => state.courses);
+
+  const hasInMyCourses = useMemo(() => {
+    return !!myCourses?.find(course => course.name === name);
+  }, [myCourses, name]);
+
   const handleAddToMyCourses = async () => {
-    await dispatch(
-      coursesActions.create({
+    const { payload } = await dispatch(
+      coursesActions.createNewCourse({
         link,
         name,
         description,
@@ -27,8 +35,11 @@ export const CourseCard: React.FC<Props> = ({
       }),
     );
 
-    if (user) {
-      navigate(AppRoute.MY_COURSES);
+    const newCourse = payload as ICourse;
+    const hasId = Object.prototype.hasOwnProperty.call(newCourse, 'id');
+
+    if (user && hasId) {
+      navigate(`${AppRoute.MY_COURSES}/${newCourse.id}`);
     }
   };
 
@@ -54,8 +65,11 @@ export const CourseCard: React.FC<Props> = ({
 
       <button
         type="button"
-        className={styles.button}
+        className={cn(styles.button, {
+          [styles.activeButton]: hasInMyCourses,
+        })}
         onClick={handleAddToMyCourses}
+        disabled={hasInMyCourses}
       >
         +
       </button>

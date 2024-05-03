@@ -1,4 +1,4 @@
 export const TaskStatus = {
   IN_PROGRESS: 'NOT_STARTED',
-  DONE: 'DONE',
+  COMPLETED: 'COMPLETED',
 } as const;

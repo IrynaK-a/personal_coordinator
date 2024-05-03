@@ -1,22 +1,19 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect } from 'react';
 import avatar from '../../../assets/icons/avatar.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as aiActions from '../../slices/aiSlice';
-import { DataStatus, IInspirationResponse } from '../../types';
+import * as coursesActions from '../../slices/coursesSlice';
+import { DataStatus } from '../../types';
 import { Loader, CoursesSections, FindCourseButton } from '../../components';
 
 import style from './HomePage.module.scss';
 
 export const HomePage = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector(state => state.auth);
   const { inspirationQuote, aiInspirationRequestStatus } = useAppSelector(
     state => state.ai,
   );
-  const [inspiration, setInspiration] = useState<IInspirationResponse | null>(
-    null,
-  );
+  const { user } = useAppSelector(state => state.auth);
 
   const isInspirationLoading =
     aiInspirationRequestStatus === DataStatus.PENDING;
@@ -27,10 +24,8 @@ export const HomePage = () => {
   };
 
   useEffect(() => {
-    if (inspirationQuote && typeof inspirationQuote !== 'string') {
-      setInspiration(inspirationQuote);
-    }
-  }, [inspirationQuote]);
+    dispatch(coursesActions.getAllMyCourses());
+  }, [dispatch]);
 
   return (
     <div className={style.home}>
@@ -67,10 +62,10 @@ export const HomePage = () => {
         ) : (
           <>
             <span className={style.inspirationTitle}>
-              {inspiration && inspiration.title}
+              {inspirationQuote && inspirationQuote.title}
               {'! '}
             </span>
-            <span>{inspiration && inspiration?.text}</span>
+            <span>{inspirationQuote && inspirationQuote?.text}</span>
           </>
         )}
       </section>

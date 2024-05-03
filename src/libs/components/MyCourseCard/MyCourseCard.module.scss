@@ -9,7 +9,7 @@
   padding: 15px;
   background-color: $white;
   border-radius: 20px;
-  transition: all 0.3s;
+  transition: all $transiton-duration;
 
   @include on-big-screens {
     padding: 20px 50px;
@@ -34,13 +34,18 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  max-width: 100%;
+  height: max-content;
 }
 
 .title {
   @include h2;
 
   color: $primary;
-  transition: all 0.3s;
+  line-height: 26px;
+  word-break: break-all;
+  transition: all $transiton-duration;
 
   &:hover {
     color: $main-accent;
@@ -61,7 +66,7 @@
   }
 
   & > * {
-    transition: all 0.3s;
+    transition: all $transiton-duration;
   }
 
   &:hover > * {
@@ -116,7 +121,7 @@
   margin-right: 10px;
 }
 
-.seeAllLink {
+.seeMoreLink {
   @include flexbox-align-center;
   @include buttons-text;
 

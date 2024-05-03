@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { StorageKey, ICourse } from '../types';
+import { StorageKey, ICourse, UpdateCourseData } from '../types';
 import { CreateCourseData } from '../types/createCourseData.type';
 
 const BASE_API_URL = 'http://localhost:8080/api/courses/';
@@ -25,7 +25,7 @@ export const getAllCourses = async () => {
   return data;
 };
 
-export const deleteCourse = async (id: number) => {
+export const deleteCourse = async (courseId: number) => {
   const token = localStorage.getItem(StorageKey.TOKEN);
 
   if (!token) {
@@ -33,7 +33,30 @@ export const deleteCourse = async (id: number) => {
     return null;
   }
 
-  const { data } = await coursesFetch.delete<Pick<ICourse, 'id'>>(`${id}`, {
+  const { data } = await coursesFetch.delete<Pick<ICourse, 'id'>>(
+    `${courseId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return data;
+};
+
+export const updateCourse = async (
+  courseId: number,
+  payload: UpdateCourseData,
+) => {
+  const token = localStorage.getItem(StorageKey.TOKEN);
+
+  if (!token) {
+    window.location.reload();
+    return null;
+  }
+
+  const { data } = await coursesFetch.patch<ICourse>(`${courseId}`, payload, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -42,7 +65,7 @@ export const deleteCourse = async (id: number) => {
   return data;
 };
 
-export const changeCourse = async (course: ICourse) => {
+export const createCourse = async (payload: CreateCourseData) => {
   const token = localStorage.getItem(StorageKey.TOKEN);
 
   if (!token) {
@@ -50,7 +73,7 @@ export const changeCourse = async (course: ICourse) => {
     return null;
   }
 
-  const { data } = await coursesFetch.patch<ICourse[]>(`${course.id}`, course, {
+  const { data } = await coursesFetch.post<ICourse>('add', payload, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -58,7 +81,8 @@ export const changeCourse = async (course: ICourse) => {
 
   return data;
 };
-export const createCourse = async (course: CreateCourseData) => {
+
+export const getCurrentCourse = async (payload: number) => {
   const token = localStorage.getItem(StorageKey.TOKEN);
 
   if (!token) {
@@ -66,7 +90,7 @@ export const createCourse = async (course: CreateCourseData) => {
     return null;
   }
 
-  const { data } = await coursesFetch.post<ICourse>('add', course, {
+  const { data } = await coursesFetch.get<ICourse>(`${payload}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

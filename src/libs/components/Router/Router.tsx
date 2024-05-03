@@ -4,6 +4,7 @@ import { App } from '../App';
 import { PublicRoute } from '../PublicRoute';
 import { ProtectedRoute } from '../ProtectedRoute';
 import {
+  CoursePage,
   CreateCourse,
   FindCoursePage,
   HomePage,
@@ -45,6 +46,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <CreateCourse />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: AppRoute.COURSE,
+        element: (
+          <ProtectedRoute>
+            <CoursePage />
           </ProtectedRoute>
         ),
       },

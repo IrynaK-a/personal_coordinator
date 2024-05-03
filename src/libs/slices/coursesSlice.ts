@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import {
+  UpdateCourseData,
   CreateCourseData,
   DataStatus,
   IDefaultCourse,
@@ -11,12 +12,16 @@ import {
   getAllCourses,
   deleteCourse as deleteCurrentCourse,
   createCourse,
+  getCurrentCourse,
+  updateCourse,
 } from '../api/myCoursesApi';
 import { getDefaultCourses } from '../api/defaultCoursesApi';
 
 export interface ICourseState {
   coursesRequestStatus: ValueOf<typeof DataStatus>;
   deleteCourseRequestStatus: ValueOf<typeof DataStatus>;
+  defaultCoursesRequestStatus: ValueOf<typeof DataStatus>;
+  currentCoursesRequestStatus: ValueOf<typeof DataStatus>;
   hasError: boolean;
   myCourses: ICourse[] | null;
   currentCourse: ICourse | null;
@@ -26,6 +31,8 @@ export interface ICourseState {
 const initialState: ICourseState = {
   coursesRequestStatus: DataStatus.IDLE,
   deleteCourseRequestStatus: DataStatus.IDLE,
+  defaultCoursesRequestStatus: DataStatus.IDLE,
+  currentCoursesRequestStatus: DataStatus.IDLE,
   hasError: false,
   myCourses: null,
   currentCourse: null,
@@ -49,14 +56,14 @@ export const getAllMyCourses = createAsyncThunk('courses/all', async () => {
 
 export const deleteCourse = createAsyncThunk(
   'courses/delete',
-  async (id: number) => {
-    const deletedId = await deleteCurrentCourse(id);
+  async (payload: number) => {
+    const deletedId = await deleteCurrentCourse(payload);
 
     return deletedId;
   },
 );
 
-export const create = createAsyncThunk(
+export const createNewCourse = createAsyncThunk(
   'courses/create',
   async (payload: CreateCourseData) => {
     const newCourse = await createCourse(payload);
@@ -65,25 +72,61 @@ export const create = createAsyncThunk(
   },
 );
 
+export const getCurrent = createAsyncThunk(
+  'courses/current',
+  async (payload: number) => {
+    const currentCourse = await getCurrentCourse(payload);
+
+    return currentCourse;
+  },
+);
+
+export const updateCurrentCourse = createAsyncThunk(
+  'courses/updateCurrent',
+  async ({
+    updatedCourse,
+    id,
+  }: {
+    id: number;
+    updatedCourse: UpdateCourseData;
+  }) => {
+    const changedCourse = await updateCourse(id, updatedCourse);
+
+    return changedCourse;
+  },
+);
+
 export const { reducer, actions } = createSlice({
   initialState,
   name: 'courses',
-  reducers: {},
+  reducers: {
+    setNoCurrentCourse(state) {
+      state.currentCourse = null;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getAllMyCourses.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;
       state.hasError = false;
       state.myCourses = payload;
     });
-    builder.addCase(create.fulfilled, (state, { payload }) => {
+    builder.addCase(createNewCourse.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;
       state.hasError = false;
       state.currentCourse = payload;
     });
     builder.addCase(getAllDefaultCourses.fulfilled, (state, { payload }) => {
-      state.coursesRequestStatus = DataStatus.FULFILLED;
+      state.defaultCoursesRequestStatus = DataStatus.FULFILLED;
       state.hasError = false;
       state.defaultCourses = payload;
+    });
+    builder.addCase(getAllDefaultCourses.pending, state => {
+      state.defaultCoursesRequestStatus = DataStatus.PENDING;
+      state.hasError = false;
+    });
+    builder.addCase(getAllDefaultCourses.rejected, state => {
+      state.defaultCoursesRequestStatus = DataStatus.REJECTED;
+      state.hasError = true;
     });
     builder.addCase(deleteCourse.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;
@@ -101,24 +144,41 @@ export const { reducer, actions } = createSlice({
       state.deleteCourseRequestStatus = DataStatus.REJECTED;
       state.hasError = true;
     });
+    builder.addCase(getCurrent.fulfilled, (state, { payload }) => {
+      state.currentCoursesRequestStatus = DataStatus.FULFILLED;
+      state.hasError = false;
+      state.currentCourse = payload;
+    });
+    builder.addCase(getCurrent.pending, state => {
+      state.currentCoursesRequestStatus = DataStatus.PENDING;
+      state.hasError = false;
+    });
+    builder.addCase(getCurrent.rejected, state => {
+      state.currentCoursesRequestStatus = DataStatus.REJECTED;
+      state.hasError = true;
+    });
+    builder.addCase(updateCurrentCourse.fulfilled, (state, { payload }) => {
+      state.currentCoursesRequestStatus = DataStatus.FULFILLED;
+      state.hasError = false;
+      state.currentCourse = payload;
+    });
+    builder.addCase(updateCurrentCourse.pending, state => {
+      state.currentCoursesRequestStatus = DataStatus.PENDING;
+      state.hasError = false;
+    });
+    builder.addCase(updateCurrentCourse.rejected, state => {
+      state.currentCoursesRequestStatus = DataStatus.REJECTED;
+      state.hasError = true;
+    });
     builder.addMatcher(
-      isAnyOf(
-        getAllMyCourses.rejected,
-        create.rejected,
-        getAllDefaultCourses.rejected,
-      ),
+      isAnyOf(getAllMyCourses.rejected, createNewCourse.rejected),
       state => {
         state.coursesRequestStatus = DataStatus.REJECTED;
         state.hasError = true;
       },
     );
     builder.addMatcher(
-      isAnyOf(
-        getAllMyCourses.pending,
-        create.pending,
-        getAllDefaultCourses.pending,
-        deleteCourse.pending,
-      ),
+      isAnyOf(getAllMyCourses.pending, createNewCourse.pending),
       state => {
         state.coursesRequestStatus = DataStatus.PENDING;
         state.hasError = false;

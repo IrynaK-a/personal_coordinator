@@ -28,7 +28,7 @@
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
-  transition: all 0.3s;
+  transition: all $transiton-duration;
 
   &:hover {
     color: $primary;

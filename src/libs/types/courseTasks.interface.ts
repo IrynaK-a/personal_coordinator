@@ -1,10 +1,9 @@
 import { TaskStatus } from './taskStatus.enum';
 import { ValueOf } from './valueOf.type';
 
-export interface ICourseTasks {
+export interface ICourseTask {
   id: number;
-  taskId: number;
-  taskName: string;
-  taskDescription: string;
+  courseId: number;
+  name: string;
   status: ValueOf<typeof TaskStatus>;
 }

@@ -1,4 +1,4 @@
-import { ICourseTasks } from './courseTasks.interface';
+import { ICourseTask } from './courseTasks.interface';
 
 export interface ICourse {
   id: number;
@@ -9,5 +9,5 @@ export interface ICourse {
   startDate: string;
   link: string;
   image: string;
-  courseTasks: ICourseTasks[];
+  courseTasks: ICourseTask[];
 }
