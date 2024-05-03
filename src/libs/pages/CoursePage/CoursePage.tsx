@@ -4,11 +4,14 @@ import cn from 'classnames';
 
 import { ReactComponent as TasksIcon } from '../../../assets/icons/tasks.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { AboutCourseSection } from '../../components/AboutCourseSection';
-
-import * as coursesActions from '../../slices/coursesSlice';
+import {
+  AboutCourseSection,
+  CreateTaskBar,
+  Loader,
+  TasksContainer,
+} from '../../components';
 import { DataStatus } from '../../types';
-import { CreateTaskBar, Loader, Todo } from '../../components';
+import * as coursesActions from '../../slices/coursesSlice';
 
 import styles from './CoursePage.module.scss';
 
@@ -18,17 +21,22 @@ export const CoursePage = () => {
   const dispatch = useAppDispatch();
   const { currentCourse, currentCoursesRequestStatus, hasError } =
     useAppSelector(state => state.courses);
-  const { currentTasks } = useAppSelector(state => state.tasks);
 
   const isCourseLoading = currentCoursesRequestStatus === DataStatus.PENDING;
   const hasCurrentCourse = !isCourseLoading && currentCourse && !hasError;
-  const hasCourses = Boolean(currentTasks.length);
 
   useEffect(() => {
-    if (id) {
+    if (id && !currentCourse) {
       dispatch(coursesActions.getCurrent(+id));
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, currentCourse]);
+
+  useEffect(
+    () => () => {
+      dispatch(coursesActions.actions.setNoCurrentCourse());
+    },
+    [dispatch],
+  );
 
   return (
     <div className={styles.container}>
@@ -60,19 +68,7 @@ export const CoursePage = () => {
               <h3 className={styles.tasksTitle}>Tasks</h3>
             </div>
 
-            <div className={styles.tasksContainer}>
-              {hasCourses ? (
-                currentTasks.map(task => (
-                  <Todo
-                    task={task}
-                    key={task.id}
-                    currentCourseId={currentCourse.id}
-                  />
-                ))
-              ) : (
-                <p className={styles.noTasksInfo}>There are no tasks yet</p>
-              )}
-            </div>
+            <TasksContainer />
           </section>
         </>
       )}

@@ -7,19 +7,41 @@ import {
   DeleteTaskData,
 } from '../types';
 
-const BASE_API_URL = 'http://localhost:8080/api/tasks/';
+const BASE_API_URL = 'http://localhost:8080/api/courses/';
 
 const tasksFetch = axios.create({
   baseURL: BASE_API_URL,
 });
 
-export const create = async ({ courseId, taskName }: CreateTaskData) => {
-  const API_URL = 'http://localhost:8080/api/courses/add/';
+export const create = async ({ courseId, name }: CreateTaskData) => {
+  const token = localStorage.getItem(StorageKey.TOKEN);
+
+  if (!token) {
+    window.location.reload();
+    return null;
+  }
+
+  const { data } = await tasksFetch.post<ICourseTask>(
+    `add/${courseId}`,
+    { name },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return data;
+};
+
+export const updateTask = async ({ status, name, id }: UpdatedTaskData) => {
+  const API_URL = 'http://localhost:8080/api/tasks/';
 
   const token = localStorage.getItem(StorageKey.TOKEN);
 
   if (!token) {
     window.location.reload();
+
     return null;
   }
 
@@ -27,37 +49,15 @@ export const create = async ({ courseId, taskName }: CreateTaskData) => {
     .create({
       baseURL: API_URL,
     })
-    .post<ICourseTask>(
-      `${courseId}`,
-      { name: taskName },
+    .patch<ICourseTask>(
+      `${id}`,
+      { name, status },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       },
     );
-
-  return data;
-};
-
-export const updateTask = async ({ status, taskName, id }: UpdatedTaskData) => {
-  const token = localStorage.getItem(StorageKey.TOKEN);
-
-  if (!token) {
-    window.location.reload();
-
-    return null;
-  }
-
-  const { data } = await tasksFetch.patch<ICourseTask>(
-    `${id}`,
-    { taskName, status },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
 
   return data;
 };
@@ -70,14 +70,11 @@ export const deleteTask = async ({ courseId, id }: DeleteTaskData) => {
     return null;
   }
 
-  const { data } = await tasksFetch.delete<Pick<ICourseTask, 'id'>>(
-    `${id}/${courseId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const { data } = await tasksFetch.delete<number>(`${id}/${courseId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+  });
 
   return data;
 };

@@ -99,7 +99,11 @@ export const updateCurrentCourse = createAsyncThunk(
 export const { reducer, actions } = createSlice({
   initialState,
   name: 'courses',
-  reducers: {},
+  reducers: {
+    setNoCurrentCourse(state) {
+      state.currentCourse = null;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getAllMyCourses.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;

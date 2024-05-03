@@ -23,7 +23,7 @@ export const CreateTaskBar = () => {
 
     const newTask: CreateTaskData = {
       courseId: currentCourse.id,
-      taskName: newTaskTitle,
+      name: newTaskTitle,
     };
 
     await dispatch(tasksActions.createTask(newTask));

@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const Todo: React.FC<Props> = ({
-  task: { id, status, taskName },
+  task: { id, status, name },
   currentCourseId,
 }) => {
   const dispatch = useAppDispatch();
@@ -22,8 +22,10 @@ export const Todo: React.FC<Props> = ({
     await dispatch(
       tasksAction.updateCurrentTask({
         status:
-          status === TaskStatus.DONE ? TaskStatus.IN_PROGRESS : TaskStatus.DONE,
-        taskName,
+          status === TaskStatus.COMPLETED
+            ? TaskStatus.IN_PROGRESS
+            : TaskStatus.COMPLETED,
+        name,
         id,
       }),
     );
@@ -32,7 +34,7 @@ export const Todo: React.FC<Props> = ({
   const { handleSubmit, register } = useForm<UpdatedTaskData>();
 
   const onSubmit = async (updatedTask: UpdatedTaskData) => {
-    if (!updatedTask.taskName.trim()) {
+    if (!updatedTask.name.trim()) {
       setIsUpdatingTodoTitle(false);
       return;
     }
@@ -40,7 +42,7 @@ export const Todo: React.FC<Props> = ({
     await dispatch(
       tasksAction.updateCurrentTask({
         status,
-        taskName: updatedTask.taskName.trim(),
+        name: updatedTask.name.trim(),
         id,
       }),
     );
@@ -62,7 +64,7 @@ export const Todo: React.FC<Props> = ({
       <input
         type="checkbox"
         className={styles.checkbox}
-        checked={status === TaskStatus.DONE}
+        checked={status === TaskStatus.COMPLETED}
         onChange={toggleChecked}
       />
 
@@ -75,7 +77,7 @@ export const Todo: React.FC<Props> = ({
           <input
             type="text"
             className={styles.input}
-            {...register('taskName')}
+            {...register('name')}
           />
         </form>
       ) : (
@@ -84,7 +86,7 @@ export const Todo: React.FC<Props> = ({
             onDoubleClick={() => setIsUpdatingTodoTitle(true)}
             className={styles.taskName}
           >
-            {taskName}
+            {name}
           </span>
 
           <button

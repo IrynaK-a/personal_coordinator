@@ -44,9 +44,7 @@
 
   color: $primary;
   line-height: 26px;
-  text-wrap: wrap;
   word-break: break-all;
-  overflow-wrap: break-word;
   transition: all $transiton-duration;
 
   &:hover {
@@ -123,7 +121,7 @@
   margin-right: 10px;
 }
 
-.seeAllLink {
+.seeMoreLink {
   @include flexbox-align-center;
   @include buttons-text;
 

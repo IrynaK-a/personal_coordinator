@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { Loader, CourseCard } from '..';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { DataStatus } from '../../types';
@@ -10,42 +10,45 @@ type Props = {
   showDefault?: boolean;
 };
 
-export const CoursesSections: React.FC<Props> = ({ showDefault = false }) => {
-  const dispatch = useAppDispatch();
+export const CoursesSections: React.FC<Props> = memo(
+  ({ showDefault = false }) => {
+    const dispatch = useAppDispatch();
 
-  const { defaultCourses, coursesRequestStatus } = useAppSelector(
-    state => state.courses,
-  );
-  const { aiCoursesRequestStatus, foundedCourses } = useAppSelector(
-    state => state.ai,
-  );
+    const { defaultCourses, coursesRequestStatus } = useAppSelector(
+      state => state.courses,
+    );
+    const { aiCoursesRequestStatus, foundedCourses } = useAppSelector(
+      state => state.ai,
+    );
 
-  const isCoursesLoading = showDefault
-    ? coursesRequestStatus === DataStatus.PENDING
-    : aiCoursesRequestStatus === DataStatus.PENDING;
-  const courses = showDefault ? defaultCourses : foundedCourses;
+    const isCoursesLoading = showDefault
+      ? coursesRequestStatus === DataStatus.PENDING
+      : aiCoursesRequestStatus === DataStatus.PENDING;
 
-  useEffect(() => {
-    dispatch(coursesActions.getAllDefaultCourses());
-  }, [dispatch]);
+    const courses = showDefault ? defaultCourses : foundedCourses;
 
-  return (
-    <div className={style.courses}>
-      <h2 className={style.title}>Courses</h2>
+    useEffect(() => {
+      dispatch(coursesActions.getAllDefaultCourses());
+    }, [dispatch]);
 
-      <div className={style.cards}>
-        {isCoursesLoading ? (
-          <Loader />
-        ) : (
-          courses &&
-          courses.map(course => (
-            <CourseCard
-              course={course}
-              key={course.name}
-            />
-          ))
-        )}
+    return (
+      <div className={style.courses}>
+        <h2 className={style.title}>Courses</h2>
+
+        <div className={style.cards}>
+          {isCoursesLoading ? (
+            <Loader />
+          ) : (
+            courses &&
+            courses.map(course => (
+              <CourseCard
+                course={course}
+                key={course.name}
+              />
+            ))
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  },
+);

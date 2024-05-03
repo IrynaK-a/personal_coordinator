@@ -80,7 +80,7 @@ export const { reducer, actions } = createSlice({
       state.hasError = false;
       if (payload) {
         state.currentTasks = state.currentTasks.filter(
-          task => task.id !== payload.id,
+          task => task.id !== payload,
         );
       }
     });
@@ -97,7 +97,7 @@ export const { reducer, actions } = createSlice({
       state.hasError = false;
       state.currentTasks.forEach(task => {
         if (task.id === payload?.id) {
-          task.taskName = payload.taskName;
+          task.name = payload.name;
           task.status = payload.status;
         }
       });

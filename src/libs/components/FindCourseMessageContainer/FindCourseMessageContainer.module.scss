@@ -16,6 +16,11 @@
   }
 }
 
+.errorContainer {
+  border: 3px solid $main-accent;
+
+}
+
 .titleContainer {
   display: flex;
   flex-direction: column;
@@ -37,6 +42,10 @@
   @include on-big-screens {
     @include h2;
   }
+}
+
+.errorTitle {
+  color: $main-accent;
 }
 
 .message {

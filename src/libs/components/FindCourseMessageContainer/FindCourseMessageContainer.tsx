@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import { useMemo } from 'react';
+import cn from 'classnames';
 import { ReactComponent as ScaleIcon } from '../../../assets/icons/upscale-spark.svg';
 import { ReactComponent as SadIcon } from '../../../assets/icons/formkit_sad.svg';
 import { useAppSelector } from '../../app/hooks';
@@ -35,9 +36,19 @@ export const FindCourseMessageContainer = () => {
   const hasError = aiCoursesRequestStatus === 'rejected';
 
   return (
-    <div className={styles.messageContainer}>
+    <div
+      className={cn(styles.messageContainer, {
+        [styles.errorContainer]: hasError,
+      })}
+    >
       <div className={styles.titleContainer}>
-        <h2 className={styles.title}>{title}</h2>
+        <h2
+          className={cn(styles.title, {
+            [styles.errorTitle]: hasError,
+          })}
+        >
+          {title}
+        </h2>
 
         {hasError ? (
           <SadIcon className={styles.icon} />

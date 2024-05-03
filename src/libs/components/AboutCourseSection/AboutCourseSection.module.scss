@@ -99,7 +99,7 @@
   @include h2;
 
   color: $primary;
-  word-break: break-all;
+  word-break: keep-all;
 }
 
 .titleContainer {
