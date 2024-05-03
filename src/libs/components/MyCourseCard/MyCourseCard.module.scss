@@ -1,0 +1,74 @@
+@import '/src/assets/css/variables';
+@import '/src/assets/css/mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding: 20px 15px;
+  background-color: $white;
+  border-radius: 20px;
+
+  @include on-big-screens {
+    padding: 30px 50px 10px;
+  }
+
+  @include on-tablet {
+    padding: 20px 20px 10px;
+  }
+}
+
+.tasksSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  @include on-big-screens {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+  }
+}
+
+.subtitle {
+  @include h3;
+
+  margin-bottom: 10px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  margin-bottom: 15px;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 21px;
+  height: 21px;
+  margin-right: 10px;
+}
+
+.seeAllLink {
+  @include flexbox-align-center;
+  @include buttons-text;
+
+  color: $main-accent;
+
+  &::after {
+    width: 15px;
+    height: 17px;
+    margin-left: 5px;
+    text-align: center;
+    content: url("../../../assets//icons/arrow-right_accent.svg");
+  }
+}

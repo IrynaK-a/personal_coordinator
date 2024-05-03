@@ -1,32 +1,37 @@
 import { useEffect, useState } from 'react';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom';
 
 import avatar from '../../../assets/img/avatar-tom.jpg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as aiActions from '../../slices/aiSlice';
-import { Loader, CourseCard } from '../../components';
+import * as coursesActions from '../../slices/coursesSlice';
 import { AppRoute, IInspirationResponse } from '../../types';
-import { COURSES } from '../../constants/courses';
+import { Loader, CourseCard } from '../../components';
 
 import style from './HomePage.module.scss';
 
 export const HomePage = () => {
   const dispatch = useAppDispatch();
-  const { quote, aiRequestStatus, userName } = useAppSelector(
-    ({ ai, auth }) => ({
-      quote: ai.answer,
-      userName: auth.user,
-      aiRequestStatus: ai.aiRequestStatus,
-    }),
-  );
+  const {
+    quote,
+    aiRequestStatus,
+    userName,
+    defaultCourses,
+    defaultCoursesRequestStatus,
+  } = useAppSelector(({ ai, auth, courses }) => ({
+    quote: ai.answer,
+    userName: auth.user,
+    aiRequestStatus: ai.aiRequestStatus,
+    defaultCourses: courses.defaultCourses,
+    defaultCoursesRequestStatus: courses.coursesRequestStatus,
+  }));
   const [inspiration, setInspiration] = useState<IInspirationResponse | null>(
     null,
   );
 
   const isInspirationLoading = aiRequestStatus === 'pending';
   const hasInspirationShown = aiRequestStatus !== 'idle';
+  const isDefaultCoursesLoading = defaultCoursesRequestStatus === 'pending';
 
   const getInspired = async () => {
     dispatch(aiActions.getInspired());
@@ -37,6 +42,10 @@ export const HomePage = () => {
       setInspiration(quote);
     }
   }, [quote]);
+
+  useEffect(() => {
+    dispatch(coursesActions.getAllDefaultCourses());
+  }, [dispatch]);
 
   return (
     <div className={style.home}>
@@ -92,21 +101,15 @@ export const HomePage = () => {
         <h2 className={style.title}>Courses</h2>
 
         <div className={style.cards}>
-          {COURSES.map(course => (
-            <CourseCard
-              course={course}
-              key={course.id}
-            />
-          ))}
-        </div>
-        <div className={style.pagination}>
-          <Stack spacing={2}>
-            <Pagination
-              count={COURSES.length}
-              variant="outlined"
-              shape="rounded"
-            />
-          </Stack>
+          {isDefaultCoursesLoading && <Loader />}
+
+          {defaultCourses &&
+            defaultCourses.map(course => (
+              <CourseCard
+                course={course}
+                key={course.id}
+              />
+            ))}
         </div>
       </div>
     </div>

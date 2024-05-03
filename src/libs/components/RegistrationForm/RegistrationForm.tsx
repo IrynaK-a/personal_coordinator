@@ -3,16 +3,19 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import { useNavigate } from 'react-router';
 import { signUpSchema } from '../../validationSchemas/signUpSchema';
 import { ISignUpFormData } from '../../types/signUpFormData.interface';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as authActions from '../../slices/authSlice';
 
 import styles from './RegistrationForm.module.scss';
+import { AppRoute } from '../../types';
 
 export const RegistrationForm = () => {
   const dispatch = useAppDispatch();
-  const { authRequestStatus } = useAppSelector(state => state.auth);
+  const navigate = useNavigate();
+  const { authRequestStatus, user } = useAppSelector(state => state.auth);
   const {
     handleSubmit,
     register,
@@ -21,13 +24,19 @@ export const RegistrationForm = () => {
     resolver: yupResolver(signUpSchema),
   });
 
-  const onSubmit = ({
+  const onSubmit = async ({
     email,
     firstName,
     lastName,
     password,
   }: ISignUpFormData) => {
-    dispatch(authActions.signUp({ email, firstName, lastName, password }));
+    await dispatch(
+      authActions.signUp({ email, firstName, lastName, password }),
+    );
+
+    if (user) {
+      navigate(AppRoute.HOME);
+    }
   };
 
   return (

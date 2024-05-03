@@ -1,21 +1,21 @@
 import { Link } from 'react-router-dom';
-import { ICourses } from '../../constants/courses';
 import courseImage from '../../../assets/icons/tasks.svg';
 
 import styles from './CourseCard.module.scss';
+import { DefaultCourse } from '../../types';
 
 type Props = {
-  course: ICourses;
+  course: DefaultCourse;
 };
 
 export const CourseCard: React.FC<Props> = ({
-  course: { description, title, image = courseImage, link },
+  course: { description, name, image = courseImage, link },
 }) => {
   return (
     <div className={styles.card}>
       <img
         src={image}
-        alt={title}
+        alt={name}
         className={styles.image}
       />
       <div className={styles.info}>
@@ -23,7 +23,7 @@ export const CourseCard: React.FC<Props> = ({
           to={link}
           className={styles.link}
         >
-          <h3 className={styles.title}>{title}</h3>
+          <h3 className={styles.title}>{name}</h3>
         </Link>
         <p className={styles.description}>{description}</p>
       </div>
