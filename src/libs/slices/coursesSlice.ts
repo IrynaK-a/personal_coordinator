@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import {
   CreateCourseData,
   DataStatus,
-  DefaultCourse,
+  IDefaultCourse,
   ICourse,
   ValueOf,
 } from '../types';
@@ -20,7 +20,7 @@ export interface ICourseState {
   hasError: boolean;
   myCourses: ICourse[] | null;
   currentCourse: ICourse | null;
-  defaultCourses: DefaultCourse[] | null;
+  defaultCourses: IDefaultCourse[] | null;
 }
 
 const initialState: ICourseState = {

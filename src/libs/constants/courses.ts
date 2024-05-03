@@ -1,7 +1,7 @@
-import { DefaultCourse } from '../types';
+import { IDefaultCourse } from '../types';
 
 /* eslint-disable max-len */
-export const COURSES: DefaultCourse[] = [
+export const COURSES: IDefaultCourse[] = [
   {
     id: 1,
     name: 'Weeknight Meals',

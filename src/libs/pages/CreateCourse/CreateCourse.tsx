@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-// import { useState } from 'react';
 import cn from 'classnames';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -7,16 +6,24 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 
-import { AppRoute, CreateCourseData, ICreateCourseFormData } from '../../types';
+import {
+  AppRoute,
+  CreateCourseData,
+  DataStatus,
+  ICreateCourseFormData,
+} from '../../types';
 import { createCourseSchema } from '../../validationSchemas/createCourseSchema';
 import * as coursesActrions from '../../slices/coursesSlice';
 
 import styles from './CreateCourse.module.scss';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 export const CreateCourse = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { coursesRequestStatus } = useAppSelector(state => state.courses);
+
+  const isLoading = coursesRequestStatus === DataStatus.PENDING;
 
   const {
     handleSubmit,
@@ -41,7 +48,10 @@ export const CreateCourse = () => {
 
     try {
       await dispatch(coursesActrions.create(newCourse));
-      navigate(AppRoute.MY_COURSES);
+
+      if (coursesRequestStatus === DataStatus.FULFILLED) {
+        navigate(AppRoute.MY_COURSES);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -95,7 +105,7 @@ export const CreateCourse = () => {
           </div>
 
           <LoadingButton
-            // loading={authRequestStatus === 'pending'}
+            loading={isLoading}
             variant="contained"
             type="submit"
             className={styles.submitButton}

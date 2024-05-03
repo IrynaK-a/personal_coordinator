@@ -47,7 +47,12 @@ a {
   text-decoration: none;
 }
 
+input {
+  outline: none;
+}
+
 button {
+  font-family: inherit;
   background: none;
   border: none;
   cursor: pointer;

@@ -19,4 +19,10 @@ export const getInspiraton = async () => {
   return JSON.parse(answer) as IInspirationResponse;
 };
 
-export const getCourses = (payload: string) => payload;
+export const getCourses = async (prompt: string) => {
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const answer = response.text();
+
+  return answer;
+};
