@@ -5,9 +5,9 @@ import { Loader, MyCourseCard } from '../../components';
 import * as coursesActions from '../../slices/coursesSlice';
 import { AppRoute, DataStatus } from '../../types';
 
-import styles from './MyCourses.module.scss';
+import styles from './MyCoursesPage.module.scss';
 
-export const MyCourses = () => {
+export const MyCoursesPage = () => {
   const dispatch = useAppDispatch();
   const { myCourses, coursesRequestStatus, hasError } = useAppSelector(
     state => state.courses,
