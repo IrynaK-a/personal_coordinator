@@ -1,8 +1,11 @@
 import cn from 'classnames';
 import { StyledEngineProvider } from '@mui/material/styles';
-import Button from '@mui/material/Button';
+import { LoadingButton } from '@mui/lab';
 
+import { useRef } from 'react';
 import { LANDING_MENU_ITEMS } from '../../constants';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import * as emailActions from '../../slices/emailSlice';
 
 import styles from './ContactsSection.module.scss';
 
@@ -11,6 +14,17 @@ type Props = {
 };
 
 export const ContactsSection: React.FC<Props> = ({ className }) => {
+  const dispatch = useAppDispatch();
+  const { emailRequestStatus } = useAppSelector(state => state.email);
+  const form = useRef<HTMLFormElement>(null);
+  const handleSendQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    await dispatch(emailActions.contactTeam(form));
+
+    form.current?.reset();
+  };
+
   return (
     <StyledEngineProvider injectFirst>
       <section
@@ -24,20 +38,38 @@ export const ContactsSection: React.FC<Props> = ({ className }) => {
           help you with everything
         </p>
 
-        <form className={styles.contactsForm}>
+        <form
+          className={styles.contactsForm}
+          onSubmit={handleSendQuestion}
+          ref={form}
+        >
           <input
-            type="text"
+            type="email"
+            name="email_from"
             className={styles.input}
+            required
             placeholder="Enter your email"
           />
 
-          <Button
+          <textarea
+            className={styles.input}
+            name="message"
+            placeholder="Enter your question"
+            required
+            style={{
+              resize: 'none',
+              outline: 'none',
+            }}
+          />
+
+          <LoadingButton
+            loading={emailRequestStatus === 'pending'}
             variant="contained"
             type="submit"
             className={styles.button}
           >
-            Submit
-          </Button>
+            Send
+          </LoadingButton>
         </form>
       </section>
     </StyledEngineProvider>

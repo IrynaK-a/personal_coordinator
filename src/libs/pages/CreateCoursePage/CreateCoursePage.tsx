@@ -14,12 +14,12 @@ import {
   ICreateCourseFormData,
 } from '../../types';
 import { createCourseSchema } from '../../validationSchemas/createCourseSchema';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as coursesActions from '../../slices/coursesSlice';
 
-import styles from './CreateCourse.module.scss';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import styles from './CreateCoursePage.module.scss';
 
-export const CreateCourse = () => {
+export const CreateCoursePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { coursesRequestStatus, currentCourse } = useAppSelector(

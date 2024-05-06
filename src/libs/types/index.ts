@@ -21,3 +21,4 @@ export { type ICreateCourseFormData } from './createCourseFormData.interface';
 export { type CreateCourseData } from './createCourseData.type';
 export { type IFindCourseFormData } from './findCourseFormData.interface';
 export { type FindCoursesResponse } from './findCoursesResponse';
+export { type IUserProfileInfo } from './userProfileInfo.interface';

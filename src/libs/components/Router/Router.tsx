@@ -5,11 +5,12 @@ import { PublicRoute } from '../PublicRoute';
 import { ProtectedRoute } from '../ProtectedRoute';
 import {
   CoursePage,
-  CreateCourse,
+  CreateCoursePage,
   FindCoursePage,
   HomePage,
   LandingPage,
-  MyCourses,
+  MyCoursesPage,
+  ProfilePage,
 } from '../../pages';
 
 export const router = createBrowserRouter([
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
         path: AppRoute.MY_COURSES,
         element: (
           <ProtectedRoute>
-            <MyCourses />
+            <MyCoursesPage />
           </ProtectedRoute>
         ),
       },
@@ -45,7 +46,7 @@ export const router = createBrowserRouter([
         path: AppRoute.CREATE_COURSE,
         element: (
           <ProtectedRoute>
-            <CreateCourse />
+            <CreateCoursePage />
           </ProtectedRoute>
         ),
       },
@@ -62,6 +63,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <FindCoursePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: AppRoute.PROFILE,
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         ),
       },
