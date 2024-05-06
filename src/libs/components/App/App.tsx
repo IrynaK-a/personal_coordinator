@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as authActions from '../../slices/authSlice';
 import { DataStatus } from '../../types';
 import { Loader } from '../Loader';
+import { Notification } from '../Notification';
 
 export const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +32,9 @@ export const App: React.FC = () => {
       <Loader />
     </div>
   ) : (
-    <Outlet />
+    <>
+      <Outlet />
+      <Notification />
+    </>
   );
 };

@@ -5,7 +5,7 @@ import { LoadingButton } from '@mui/lab';
 import { useRef } from 'react';
 import { LANDING_MENU_ITEMS } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import * as emailActions from '../../slices/emailSlice';
+import * as emailActions from '../../slices/questionSlice';
 
 import styles from './ContactsSection.module.scss';
 
@@ -20,7 +20,7 @@ export const ContactsSection: React.FC<Props> = ({ className }) => {
   const handleSendQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await dispatch(emailActions.contactTeam(form));
+    await dispatch(emailActions.sendQuestion(form));
 
     form.current?.reset();
   };

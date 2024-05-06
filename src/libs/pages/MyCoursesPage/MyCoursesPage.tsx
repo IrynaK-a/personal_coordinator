@@ -9,14 +9,13 @@ import styles from './MyCoursesPage.module.scss';
 
 export const MyCoursesPage = () => {
   const dispatch = useAppDispatch();
-  const { myCourses, coursesRequestStatus, hasError } = useAppSelector(
+  const { myCourses, coursesRequestStatus } = useAppSelector(
     state => state.courses,
   );
 
   const isLoading = coursesRequestStatus === DataStatus.PENDING;
-  const hasNoCourses =
-    (!myCourses || myCourses.length === 0) && !isLoading && !hasError;
-  const hasCourses = !isLoading && !hasNoCourses && !hasError && !!myCourses;
+  const hasNoCourses = (!myCourses || myCourses.length === 0) && !isLoading;
+  const hasCourses = !isLoading && !hasNoCourses && !!myCourses;
 
   useEffect(() => {
     dispatch(coursesActions.getAllMyCourses());

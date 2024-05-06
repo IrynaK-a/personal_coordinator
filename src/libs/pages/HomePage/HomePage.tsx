@@ -17,7 +17,9 @@ export const HomePage = () => {
 
   const isInspirationLoading =
     aiInspirationRequestStatus === DataStatus.PENDING;
-  const hasInspirationShown = aiInspirationRequestStatus !== DataStatus.IDLE;
+  const hasInspirationShown =
+    aiInspirationRequestStatus === DataStatus.PENDING ||
+    aiInspirationRequestStatus === DataStatus.FULFILLED;
 
   const getInspired = async () => {
     dispatch(aiActions.getInspired());

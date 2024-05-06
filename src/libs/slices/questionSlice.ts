@@ -1,19 +1,19 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { DataStatus, ValueOf } from '../types';
 import { sendEmail } from '../api/emailApi';
+import { NOTIFICATION_MESSAGES } from '../constants';
 
 export interface IEmailState {
   emailRequestStatus: ValueOf<typeof DataStatus>;
-  hasError: boolean;
 }
 
 const initialState: IEmailState = {
   emailRequestStatus: DataStatus.IDLE,
-  hasError: false,
 };
 
-export const contactTeam = createAsyncThunk(
+export const sendQuestion = createAsyncThunk(
   'email/send',
   async (form: React.RefObject<HTMLFormElement>) => {
     await sendEmail(form);
@@ -25,17 +25,16 @@ export const { reducer, actions } = createSlice({
   name: 'email',
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(contactTeam.fulfilled, state => {
+    builder.addCase(sendQuestion.fulfilled, state => {
       state.emailRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
+      toast.success(NOTIFICATION_MESSAGES.sendQuestion.success);
     });
-    builder.addCase(contactTeam.pending, state => {
+    builder.addCase(sendQuestion.pending, state => {
       state.emailRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
     });
-    builder.addCase(contactTeam.rejected, state => {
+    builder.addCase(sendQuestion.rejected, state => {
       state.emailRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      toast.error(NOTIFICATION_MESSAGES.sendQuestion.error);
     });
   },
 });

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import {
   UpdateCourseData,
   CreateCourseData,
@@ -16,13 +17,13 @@ import {
   updateCourse,
 } from '../api/myCoursesApi';
 import { getDefaultCourses } from '../api/defaultCoursesApi';
+import { NOTIFICATION_MESSAGES } from '../constants';
 
 export interface ICourseState {
   coursesRequestStatus: ValueOf<typeof DataStatus>;
   deleteCourseRequestStatus: ValueOf<typeof DataStatus>;
   defaultCoursesRequestStatus: ValueOf<typeof DataStatus>;
   currentCoursesRequestStatus: ValueOf<typeof DataStatus>;
-  hasError: boolean;
   myCourses: ICourse[] | null;
   currentCourse: ICourse | null;
   defaultCourses: IDefaultCourse[] | null;
@@ -33,7 +34,6 @@ const initialState: ICourseState = {
   deleteCourseRequestStatus: DataStatus.IDLE,
   defaultCoursesRequestStatus: DataStatus.IDLE,
   currentCoursesRequestStatus: DataStatus.IDLE,
-  hasError: false,
   myCourses: null,
   currentCourse: null,
   defaultCourses: null,
@@ -107,81 +107,71 @@ export const { reducer, actions } = createSlice({
   extraReducers(builder) {
     builder.addCase(getAllMyCourses.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       state.myCourses = payload;
     });
     builder.addCase(createNewCourse.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       state.currentCourse = payload;
     });
     builder.addCase(getAllDefaultCourses.fulfilled, (state, { payload }) => {
       state.defaultCoursesRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       state.defaultCourses = payload;
     });
     builder.addCase(getAllDefaultCourses.pending, state => {
       state.defaultCoursesRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
     });
     builder.addCase(getAllDefaultCourses.rejected, state => {
       state.defaultCoursesRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      toast.error(NOTIFICATION_MESSAGES.defaultCourses.error);
     });
     builder.addCase(deleteCourse.fulfilled, (state, { payload }) => {
       state.coursesRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       state.myCourses =
         payload && state.myCourses
           ? state.myCourses.filter(course => course.id !== payload.id)
           : state.myCourses;
+      toast.success(NOTIFICATION_MESSAGES.deleteCourse.success);
     });
     builder.addCase(deleteCourse.pending, state => {
       state.deleteCourseRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
     });
     builder.addCase(deleteCourse.rejected, state => {
       state.deleteCourseRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      toast.error(NOTIFICATION_MESSAGES.deleteCourse.error);
     });
     builder.addCase(getCurrent.fulfilled, (state, { payload }) => {
       state.currentCoursesRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       state.currentCourse = payload;
     });
     builder.addCase(getCurrent.pending, state => {
       state.currentCoursesRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
     });
     builder.addCase(getCurrent.rejected, state => {
       state.currentCoursesRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      toast.error(NOTIFICATION_MESSAGES.course.error);
     });
     builder.addCase(updateCurrentCourse.fulfilled, (state, { payload }) => {
       state.currentCoursesRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       state.currentCourse = payload;
     });
     builder.addCase(updateCurrentCourse.pending, state => {
       state.currentCoursesRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
     });
     builder.addCase(updateCurrentCourse.rejected, state => {
       state.currentCoursesRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      toast.error(NOTIFICATION_MESSAGES.course.error);
     });
     builder.addMatcher(
       isAnyOf(getAllMyCourses.rejected, createNewCourse.rejected),
       state => {
         state.coursesRequestStatus = DataStatus.REJECTED;
-        state.hasError = true;
+        toast.error(NOTIFICATION_MESSAGES.course.error);
       },
     );
     builder.addMatcher(
       isAnyOf(getAllMyCourses.pending, createNewCourse.pending),
       state => {
         state.coursesRequestStatus = DataStatus.PENDING;
-        state.hasError = false;
       },
     );
   },

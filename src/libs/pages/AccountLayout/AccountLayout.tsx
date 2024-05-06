@@ -22,10 +22,10 @@ export const AccountLayout: React.FC<Props> = ({ children }) => {
   const location = useLocation();
   const isMyCoursesPage = location.pathname === AppRoute.MY_COURSES;
 
-  const handleLogout = () => {
-    navigate(AppRoute.ROOT);
-
+  const handleLogout = async () => {
     dispatch(authActions.actions.logOut());
+
+    navigate(AppRoute.ROOT);
   };
 
   return (

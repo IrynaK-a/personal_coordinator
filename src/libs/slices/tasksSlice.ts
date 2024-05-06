@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import {
   UpdatedTaskData,
   CreateTaskData,
@@ -10,20 +11,19 @@ import {
 } from '../types';
 import { create, deleteTask, updateTask } from '../api/tasksApi';
 import { deleteCourse, getCurrent } from './coursesSlice';
+import { NOTIFICATION_MESSAGES } from '../constants';
 
 export interface ICourseState {
-  createTaskRequestStatus: ValueOf<typeof DataStatus>;
+  taskRequestStatus: ValueOf<typeof DataStatus>;
   deleteTaskRequestStatus: ValueOf<typeof DataStatus>;
   changeTaskRequestStatus: ValueOf<typeof DataStatus>;
-  hasError: boolean;
   currentTasks: ICourseTask[];
 }
 
 const initialState: ICourseState = {
-  createTaskRequestStatus: DataStatus.IDLE,
+  taskRequestStatus: DataStatus.IDLE,
   deleteTaskRequestStatus: DataStatus.IDLE,
   changeTaskRequestStatus: DataStatus.IDLE,
-  hasError: false,
   currentTasks: [],
 };
 
@@ -60,41 +60,37 @@ export const { reducer, actions } = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(createTask.fulfilled, (state, { payload }) => {
-      state.createTaskRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
+      state.taskRequestStatus = DataStatus.FULFILLED;
       if (payload) {
         state.currentTasks.push(payload);
       }
     });
     builder.addCase(createTask.pending, state => {
-      state.createTaskRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
+      state.taskRequestStatus = DataStatus.PENDING;
     });
 
     builder.addCase(createTask.rejected, state => {
-      state.createTaskRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      state.taskRequestStatus = DataStatus.REJECTED;
+      toast.error(NOTIFICATION_MESSAGES.task.error);
     });
     builder.addCase(deleteCurrentTask.fulfilled, (state, { payload }) => {
       state.deleteTaskRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       if (payload) {
         state.currentTasks = state.currentTasks.filter(
           task => task.id !== payload,
         );
       }
+      toast.success(NOTIFICATION_MESSAGES.deleteTask.success);
     });
     builder.addCase(deleteCurrentTask.pending, state => {
       state.deleteTaskRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
     });
     builder.addCase(deleteCurrentTask.rejected, state => {
       state.deleteTaskRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      toast.error(NOTIFICATION_MESSAGES.deleteTask.error);
     });
     builder.addCase(updateCurrentTask.fulfilled, (state, { payload }) => {
       state.deleteTaskRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       state.currentTasks.forEach(task => {
         if (task.id === payload?.id) {
           task.name = payload.name;
@@ -104,22 +100,18 @@ export const { reducer, actions } = createSlice({
     });
     builder.addCase(updateCurrentTask.pending, state => {
       state.deleteTaskRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
     });
     builder.addCase(updateCurrentTask.rejected, state => {
       state.deleteTaskRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      toast.error(NOTIFICATION_MESSAGES.task.error);
     });
     builder.addCase(getCurrent.fulfilled, (state, { payload }) => {
-      state.createTaskRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
+      state.taskRequestStatus = DataStatus.FULFILLED;
       if (payload) {
         state.currentTasks = payload.courseTasks;
       }
     });
     builder.addCase(deleteCourse.fulfilled, (state, { payload }) => {
-      state.createTaskRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
       if (payload) {
         state.currentTasks = [];
       }
