@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import cn from 'classnames';
 import { useState } from 'react';
 
@@ -29,7 +30,6 @@ export const AboutCourseSection: React.FC<Props> = ({
   });
   const [isChanging, setIsChanging] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
-  const [validationError, setValidationError] = useState('');
   const navigate = useNavigate();
   const date = new Date(startDate).toLocaleDateString('uk-UA');
 
@@ -45,8 +45,6 @@ export const AboutCourseSection: React.FC<Props> = ({
     e: React.ChangeEvent<HTMLInputElement>,
     key: keyof UpdateCourseData,
   ) => {
-    setValidationError('');
-
     setUpdatedCourse({
       ...updatedCourse,
       [key]: e.target.value,
@@ -65,6 +63,11 @@ export const AboutCourseSection: React.FC<Props> = ({
         status,
       });
       setIsChanging(false);
+
+      const errorMessage =
+        error instanceof Error ? error.message : 'something went wrong';
+
+      toast.error(errorMessage);
     }
   };
 
@@ -118,7 +121,6 @@ export const AboutCourseSection: React.FC<Props> = ({
                 </button>
               </div>
             )}
-            {validationError && <p>{validationError}</p>}
 
             <button
               type="button"

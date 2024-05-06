@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { DataStatus, IUserProfileInfo, ValueOf } from '../types';
 import { fetchUserInfo } from '../api/userApi';
+import { NOTIFICATION_MESSAGES } from '../constants';
 
 export interface IAuthState {
   authRequestStatus: ValueOf<typeof DataStatus>;
@@ -29,15 +31,13 @@ export const { reducer, actions } = createSlice({
     builder.addCase(getUserInfo.fulfilled, (state, { payload }) => {
       state.userInfo = payload;
       state.authRequestStatus = DataStatus.FULFILLED;
-      state.hasError = false;
     });
     builder.addCase(getUserInfo.pending, state => {
       state.authRequestStatus = DataStatus.PENDING;
-      state.hasError = false;
     });
     builder.addCase(getUserInfo.rejected, state => {
       state.authRequestStatus = DataStatus.REJECTED;
-      state.hasError = true;
+      toast.success(NOTIFICATION_MESSAGES.userInfo.error);
     });
   },
 });

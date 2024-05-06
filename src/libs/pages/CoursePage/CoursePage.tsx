@@ -19,11 +19,12 @@ export const CoursePage = () => {
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
-  const { currentCourse, currentCoursesRequestStatus, hasError } =
-    useAppSelector(state => state.courses);
+  const { currentCourse, currentCoursesRequestStatus } = useAppSelector(
+    state => state.courses,
+  );
 
   const isCourseLoading = currentCoursesRequestStatus === DataStatus.PENDING;
-  const hasCurrentCourse = !isCourseLoading && currentCourse && !hasError;
+  const hasCurrentCourse = !isCourseLoading && currentCourse;
 
   useEffect(() => {
     if (id && !currentCourse) {

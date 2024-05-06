@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import {
   DataStatus,
   FindCoursesResponse,
@@ -7,15 +8,13 @@ import {
   IInspirationResponse,
   ValueOf,
 } from '../types';
-import { FIND_COURSES_FORM_DATA } from '../constants';
+import { FIND_COURSES_FORM_DATA, NOTIFICATION_MESSAGES } from '../constants';
 import * as aiApi from '../api/aiApi';
 import { getArrayFromAIAnswer } from '../utils/getArrayFromAIAnswer';
 
 export interface IAIState {
   aiInspirationRequestStatus: ValueOf<typeof DataStatus>;
   aiCoursesRequestStatus: ValueOf<typeof DataStatus>;
-  hasInspirationError: boolean;
-  hasCoursesError: boolean;
   inspirationQuote: IInspirationResponse | null;
   foundedCourses: FindCoursesResponse | null;
 }
@@ -23,8 +22,6 @@ export interface IAIState {
 const initialState: IAIState = {
   aiInspirationRequestStatus: DataStatus.IDLE,
   aiCoursesRequestStatus: DataStatus.IDLE,
-  hasInspirationError: false,
-  hasCoursesError: false,
   inspirationQuote: null,
   foundedCourses: null,
 };
@@ -63,36 +60,32 @@ export const { reducer, actions } = createSlice({
     setNoFoundedCourses(state) {
       state.foundedCourses = null;
       state.aiCoursesRequestStatus = DataStatus.IDLE;
-      state.hasCoursesError = false;
     },
   },
   extraReducers(builder) {
     builder
       .addCase(getInspired.fulfilled, (state, { payload }) => {
         state.aiInspirationRequestStatus = DataStatus.FULFILLED;
-        state.hasInspirationError = false;
         state.inspirationQuote = payload;
       })
       .addCase(getInspired.pending, state => {
         state.aiInspirationRequestStatus = DataStatus.PENDING;
-        state.hasInspirationError = false;
       })
       .addCase(getInspired.rejected, state => {
         state.aiInspirationRequestStatus = DataStatus.REJECTED;
-        state.hasInspirationError = true;
+        state.inspirationQuote = null;
+        toast.error(NOTIFICATION_MESSAGES.aiInspiration.error);
       })
       .addCase(getCourses.fulfilled, (state, { payload }) => {
         state.aiCoursesRequestStatus = DataStatus.FULFILLED;
-        state.hasCoursesError = false;
         state.foundedCourses = payload;
       })
       .addCase(getCourses.pending, state => {
         state.aiCoursesRequestStatus = DataStatus.PENDING;
-        state.hasCoursesError = false;
       })
       .addCase(getCourses.rejected, state => {
         state.aiCoursesRequestStatus = DataStatus.REJECTED;
-        state.hasCoursesError = true;
+        toast.error(NOTIFICATION_MESSAGES.aiCourses.error);
       });
   },
 });

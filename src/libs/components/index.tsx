@@ -20,3 +20,4 @@ export { CoursesSections } from './CoursesSections';
 export { FindCourseMessageContainer } from './FindCourseMessageContainer';
 export { TasksContainer } from './TasksContainer';
 export { AboutCourseSection } from './AboutCourseSection';
+export { Notification } from './Notification';

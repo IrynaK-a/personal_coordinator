@@ -21,9 +21,12 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
   const date = new Date(startDate).toLocaleDateString('uk-UA');
   const [isDeleting, setIsDeliting] = useState(false);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setIsDeliting(true);
-    dispatch(coursesActions.deleteCourse(id));
+
+    await dispatch(coursesActions.deleteCourse(id));
+
+    setIsDeliting(false);
   };
 
   const visibleTasks = courseTasks.slice(0, 2);

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import {
   DataStatus,
   StorageKey,
@@ -8,16 +9,15 @@ import {
   ValueOf,
 } from '../types';
 import { authApi } from '../api/authApi';
+import { NOTIFICATION_MESSAGES } from '../constants';
 
 export interface IAuthState {
   authRequestStatus: ValueOf<typeof DataStatus>;
-  hasError: boolean;
   user: string | null;
 }
 
 const initialState: IAuthState = {
   authRequestStatus: DataStatus.IDLE,
-  hasError: false,
   user: null,
 };
 
@@ -74,7 +74,6 @@ export const { reducer, actions } = createSlice({
         isAnyOf(getCurrentUser.fulfilled, signUp.fulfilled, signIn.fulfilled),
         (state, { payload }) => {
           state.authRequestStatus = DataStatus.FULFILLED;
-          state.hasError = false;
           state.user = payload;
         },
       )
@@ -82,14 +81,13 @@ export const { reducer, actions } = createSlice({
         isAnyOf(getCurrentUser.pending, signUp.pending, signIn.pending),
         state => {
           state.authRequestStatus = DataStatus.PENDING;
-          state.hasError = false;
         },
       )
       .addMatcher(
         isAnyOf(getCurrentUser.rejected, signUp.rejected, signIn.rejected),
         state => {
           state.authRequestStatus = DataStatus.REJECTED;
-          state.hasError = true;
+          toast.error(NOTIFICATION_MESSAGES.auth.error);
         },
       );
   },
