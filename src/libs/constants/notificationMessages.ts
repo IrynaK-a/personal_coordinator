@@ -1,6 +1,6 @@
 export const NOTIFICATION_MESSAGES = {
   sendQuestion: {
-    success: 'Question send',
+    success: 'Question sent',
     error: 'Oops, something went wrong. Try again',
   },
   aiInspiration: {

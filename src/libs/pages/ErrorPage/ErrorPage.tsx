@@ -19,6 +19,8 @@ export const ErrorPage: React.FC<Props> = ({ isNotFoundPage = false }) => {
 
   const handleClick = () => {
     navigate(AppRoute.HOME);
+
+    window.location.reload();
   };
 
   return (
