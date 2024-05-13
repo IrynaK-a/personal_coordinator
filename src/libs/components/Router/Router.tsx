@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 import { AppRoute } from '../../types';
 import { App } from '../App';
 import { PublicRoute } from '../PublicRoute';
@@ -6,6 +7,7 @@ import { ProtectedRoute } from '../ProtectedRoute';
 import {
   CoursePage,
   CreateCoursePage,
+  ErrorPage,
   FindCoursePage,
   HomePage,
   LandingPage,
@@ -16,7 +18,11 @@ import {
 export const router = createBrowserRouter([
   {
     path: AppRoute.ROOT,
-    element: <App />,
+    element: (
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <App />
+      </ErrorBoundary>
+    ),
     children: [
       {
         path: AppRoute.ROOT,
@@ -76,7 +82,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <p> Nothing here</p>,
+        element: <ErrorPage isNotFoundPage />,
       },
     ],
   },
