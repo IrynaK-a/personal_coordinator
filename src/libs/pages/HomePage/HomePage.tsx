@@ -19,7 +19,7 @@ export const HomePage = () => {
     aiInspirationRequestStatus === DataStatus.PENDING;
   const hasInspirationShown =
     aiInspirationRequestStatus === DataStatus.PENDING ||
-    aiInspirationRequestStatus === DataStatus.FULFILLED;
+    (aiInspirationRequestStatus === DataStatus.FULFILLED && inspirationQuote);
 
   const getInspired = async () => {
     dispatch(aiActions.getInspired());
@@ -62,13 +62,15 @@ export const HomePage = () => {
         {isInspirationLoading ? (
           <Loader />
         ) : (
-          <>
-            <span className={style.inspirationTitle}>
-              {inspirationQuote && inspirationQuote.title}
-              {'! '}
-            </span>
-            <span>{inspirationQuote && inspirationQuote?.text}</span>
-          </>
+          inspirationQuote && (
+            <>
+              <span className={style.inspirationTitle}>
+                {inspirationQuote && inspirationQuote.title}
+                {'! '}
+              </span>
+              <span>{inspirationQuote && inspirationQuote?.text}</span>
+            </>
+          )
         )}
       </section>
 

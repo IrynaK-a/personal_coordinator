@@ -2,8 +2,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { DataStatus, IUserProfileInfo, ValueOf } from '../types';
-import { fetchUserInfo } from '../api/userApi';
 import { NOTIFICATION_MESSAGES } from '../constants';
+import * as fetchUserInfo from '../api/userApi';
 
 export interface IAuthState {
   authRequestStatus: ValueOf<typeof DataStatus>;
@@ -18,7 +18,7 @@ const initialState: IAuthState = {
 };
 
 export const getUserInfo = createAsyncThunk('user/info', async () => {
-  const info = await fetchUserInfo();
+  const info = await fetchUserInfo.getInfo();
 
   return info;
 });
@@ -37,7 +37,7 @@ export const { reducer, actions } = createSlice({
     });
     builder.addCase(getUserInfo.rejected, state => {
       state.authRequestStatus = DataStatus.REJECTED;
-      toast.success(NOTIFICATION_MESSAGES.userInfo.error);
+      toast.error(NOTIFICATION_MESSAGES.userInfo.error);
     });
   },
 });

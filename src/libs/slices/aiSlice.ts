@@ -61,6 +61,9 @@ export const { reducer, actions } = createSlice({
       state.foundedCourses = null;
       state.aiCoursesRequestStatus = DataStatus.IDLE;
     },
+    deleteInspirationQuote(state) {
+      state.inspirationQuote = null;
+    },
   },
   extraReducers(builder) {
     builder

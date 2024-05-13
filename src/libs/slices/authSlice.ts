@@ -29,7 +29,9 @@ export const getCurrentUser = createAsyncThunk('auth/current', async () => {
   }
 
   try {
-    return await authApi.getCurrentUser(token);
+    const { firstName } = await authApi.getCurrentUser(token);
+
+    return firstName;
   } catch {
     localStorage.removeItem(StorageKey.TOKEN);
 

@@ -23,9 +23,7 @@ export const MyCourseCard: React.FC<Props> = ({ course }) => {
 
   const handleDelete = async () => {
     setIsDeliting(true);
-
     await dispatch(coursesActions.deleteCourse(id));
-
     setIsDeliting(false);
   };
 

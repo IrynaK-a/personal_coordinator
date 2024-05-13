@@ -7,6 +7,7 @@ import { LogoIcon, LogoText } from '../../components';
 import { ReactComponent as LogOut } from '../../../assets/icons/log-out.svg';
 import { AppRoute } from '../../types';
 import * as authActions from '../../slices/authSlice';
+import * as aiActions from '../../slices/aiSlice';
 
 import styles from './AccountLayout.module.scss';
 
@@ -24,6 +25,7 @@ export const AccountLayout: React.FC<Props> = ({ children }) => {
 
   const handleLogout = async () => {
     dispatch(authActions.actions.logOut());
+    dispatch(aiActions.actions.deleteInspirationQuote());
 
     navigate(AppRoute.ROOT);
   };
