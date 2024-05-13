@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { StyledEngineProvider } from '@mui/material/styles';
 
-import { NavHashLink } from 'react-router-hash-link';
+import { HashLink } from 'react-router-hash-link';
 import { LANDING_MENU_ITEMS } from '../../constants';
 
 import styles from './AboutSection.module.scss';
@@ -33,13 +33,13 @@ export const AboutSection: React.FC<Props> = ({ className }) => {
           <span className={styles.styledSubtitleText}> with AI</span>
         </h2>
 
-        <NavHashLink
+        <HashLink
           smooth
           to={`#${LANDING_MENU_ITEMS.Home}`}
           className={styles.button}
         >
           Try it
-        </NavHashLink>
+        </HashLink>
 
         <h3 className={styles.quote}>
           “We

@@ -1,6 +1,6 @@
 import cn from 'classnames';
 
-import { NavHashLink } from 'react-router-hash-link';
+import { HashLink } from 'react-router-hash-link';
 import { useLocation } from 'react-router-dom';
 import { LANDING_MENU_ITEMS } from '../../constants';
 
@@ -21,7 +21,7 @@ export const Nav: React.FC<Props> = ({ className }) => {
             key={item}
             className={styles.item}
           >
-            <NavHashLink
+            <HashLink
               smooth
               to={`/#${item}`}
               className={cn(styles.link, {
@@ -29,7 +29,7 @@ export const Nav: React.FC<Props> = ({ className }) => {
               })}
             >
               {item.toUpperCase()}
-            </NavHashLink>
+            </HashLink>
           </li>
         ))}
       </ul>
