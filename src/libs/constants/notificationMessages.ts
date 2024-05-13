@@ -18,6 +18,10 @@ export const NOTIFICATION_MESSAGES = {
   course: {
     error: 'Oops, something went wrong. Please, try again',
   },
+  updateCourse: {
+    success: 'Course was updated',
+    error: 'Oops, something went wrong. Please, try again',
+  },
   deleteCourse: {
     success: 'Course was successfully deleted',
     error: `Can't delete course. Please, try again`,

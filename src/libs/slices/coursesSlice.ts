@@ -9,14 +9,8 @@ import {
   ICourse,
   ValueOf,
 } from '../types';
-import {
-  getAllCourses,
-  deleteCourse as deleteCurrentCourse,
-  createCourse,
-  getCurrentCourse,
-  updateCourse,
-} from '../api/myCoursesApi';
-import { getDefaultCourses } from '../api/defaultCoursesApi';
+import { myCoursesApi } from '../api/myCoursesApi';
+import { defaultCoursesApi } from '../api/defaultCoursesApi';
 import { NOTIFICATION_MESSAGES } from '../constants';
 
 export interface ICourseState {
@@ -42,14 +36,14 @@ const initialState: ICourseState = {
 export const getAllDefaultCourses = createAsyncThunk(
   'courses/default',
   async () => {
-    const defaultCourses = await getDefaultCourses();
+    const defaultCourses = await defaultCoursesApi.getAll();
 
     return defaultCourses;
   },
 );
 
 export const getAllMyCourses = createAsyncThunk('courses/all', async () => {
-  const allCourses = await getAllCourses();
+  const allCourses = await myCoursesApi.getAll();
 
   return allCourses;
 });
@@ -57,7 +51,7 @@ export const getAllMyCourses = createAsyncThunk('courses/all', async () => {
 export const deleteCourse = createAsyncThunk(
   'courses/delete',
   async (payload: number) => {
-    const deletedId = await deleteCurrentCourse(payload);
+    const deletedId = await myCoursesApi.delete(payload);
 
     return deletedId;
   },
@@ -66,7 +60,7 @@ export const deleteCourse = createAsyncThunk(
 export const createNewCourse = createAsyncThunk(
   'courses/create',
   async (payload: CreateCourseData) => {
-    const newCourse = await createCourse(payload);
+    const newCourse = await myCoursesApi.create(payload);
 
     return newCourse;
   },
@@ -75,7 +69,7 @@ export const createNewCourse = createAsyncThunk(
 export const getCurrent = createAsyncThunk(
   'courses/current',
   async (payload: number) => {
-    const currentCourse = await getCurrentCourse(payload);
+    const currentCourse = await myCoursesApi.getCurrent(payload);
 
     return currentCourse;
   },
@@ -90,7 +84,7 @@ export const updateCurrentCourse = createAsyncThunk(
     id: number;
     updatedCourse: UpdateCourseData;
   }) => {
-    const changedCourse = await updateCourse(id, updatedCourse);
+    const changedCourse = await myCoursesApi.update(id, updatedCourse);
 
     return changedCourse;
   },
@@ -153,13 +147,14 @@ export const { reducer, actions } = createSlice({
     builder.addCase(updateCurrentCourse.fulfilled, (state, { payload }) => {
       state.currentCoursesRequestStatus = DataStatus.FULFILLED;
       state.currentCourse = payload;
+      toast.success(NOTIFICATION_MESSAGES.updateCourse.success);
     });
     builder.addCase(updateCurrentCourse.pending, state => {
       state.currentCoursesRequestStatus = DataStatus.PENDING;
     });
     builder.addCase(updateCurrentCourse.rejected, state => {
       state.currentCoursesRequestStatus = DataStatus.REJECTED;
-      toast.error(NOTIFICATION_MESSAGES.course.error);
+      toast.error(NOTIFICATION_MESSAGES.updateCourse.error);
     });
     builder.addMatcher(
       isAnyOf(getAllMyCourses.rejected, createNewCourse.rejected),

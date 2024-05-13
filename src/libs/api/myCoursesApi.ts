@@ -1,100 +1,20 @@
-import axios from 'axios';
-import { StorageKey, ICourse, UpdateCourseData } from '../types';
+import { ICourse, UpdateCourseData } from '../types';
 import { CreateCourseData } from '../types/createCourseData.type';
+import { client } from '../utils/fetchClient';
+import { getToken } from '../utils/getToken';
 
-const BASE_API_URL = 'http://localhost:8080/api/courses/';
+export const myCoursesApi = {
+  getAll: () => client.get<ICourse[]>('/courses/all', getToken()),
 
-const coursesFetch = axios.create({
-  baseURL: BASE_API_URL,
-});
+  getCurrent: (courseId: number) =>
+    client.get<ICourse>(`/courses/${courseId}`, getToken()),
 
-export const getAllCourses = async () => {
-  const token = localStorage.getItem(StorageKey.TOKEN);
+  create: (payload: CreateCourseData) =>
+    client.post<ICourse>('/courses/add', payload, getToken()),
 
-  if (!token) {
-    window.location.reload();
-    return null;
-  }
+  update: (courseId: number, payload: UpdateCourseData) =>
+    client.patch<ICourse>(`/courses/${courseId}`, payload, getToken()),
 
-  const { data } = await coursesFetch.get<ICourse[]>('all', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return data;
-};
-
-export const deleteCourse = async (courseId: number) => {
-  const token = localStorage.getItem(StorageKey.TOKEN);
-
-  if (!token) {
-    window.location.reload();
-    return null;
-  }
-
-  const { data } = await coursesFetch.delete<Pick<ICourse, 'id'>>(
-    `${courseId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-
-  return data;
-};
-
-export const updateCourse = async (
-  courseId: number,
-  payload: UpdateCourseData,
-) => {
-  const token = localStorage.getItem(StorageKey.TOKEN);
-
-  if (!token) {
-    window.location.reload();
-    return null;
-  }
-
-  const { data } = await coursesFetch.patch<ICourse>(`${courseId}`, payload, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return data;
-};
-
-export const createCourse = async (payload: CreateCourseData) => {
-  const token = localStorage.getItem(StorageKey.TOKEN);
-
-  if (!token) {
-    window.location.reload();
-    return null;
-  }
-
-  const { data } = await coursesFetch.post<ICourse>('add', payload, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return data;
-};
-
-export const getCurrentCourse = async (payload: number) => {
-  const token = localStorage.getItem(StorageKey.TOKEN);
-
-  if (!token) {
-    window.location.reload();
-    return null;
-  }
-
-  const { data } = await coursesFetch.get<ICourse>(`${payload}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return data;
+  delete: (courseId: number) =>
+    client.delete<Pick<ICourse, 'id'>>(`/courses/${courseId}`, getToken()),
 };

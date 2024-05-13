@@ -1,80 +1,19 @@
-import axios from 'axios';
 import {
-  StorageKey,
   CreateTaskData,
   ICourseTask,
   UpdatedTaskData,
   DeleteTaskData,
 } from '../types';
+import { client } from '../utils/fetchClient';
+import { getToken } from '../utils/getToken';
 
-const BASE_API_URL = 'http://localhost:8080/api/courses/';
+export const tasksApi = {
+  create: ({ courseId, name }: CreateTaskData) =>
+    client.post<ICourseTask>(`/courses/add/${courseId}`, { name }, getToken()),
 
-const tasksFetch = axios.create({
-  baseURL: BASE_API_URL,
-});
+  update: ({ status, name, id: taskId }: UpdatedTaskData) =>
+    client.patch<ICourseTask>(`/tasks/${taskId}`, { name, status }, getToken()),
 
-export const create = async ({ courseId, name }: CreateTaskData) => {
-  const token = localStorage.getItem(StorageKey.TOKEN);
-
-  if (!token) {
-    window.location.reload();
-    return null;
-  }
-
-  const { data } = await tasksFetch.post<ICourseTask>(
-    `add/${courseId}`,
-    { name },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-
-  return data;
-};
-
-export const updateTask = async ({ status, name, id }: UpdatedTaskData) => {
-  const API_URL = 'http://localhost:8080/api/tasks/';
-
-  const token = localStorage.getItem(StorageKey.TOKEN);
-
-  if (!token) {
-    window.location.reload();
-
-    return null;
-  }
-
-  const { data } = await axios
-    .create({
-      baseURL: API_URL,
-    })
-    .patch<ICourseTask>(
-      `${id}`,
-      { name, status },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-
-  return data;
-};
-
-export const deleteTask = async ({ courseId, id }: DeleteTaskData) => {
-  const token = localStorage.getItem(StorageKey.TOKEN);
-
-  if (!token) {
-    window.location.reload();
-    return null;
-  }
-
-  const { data } = await tasksFetch.delete<number>(`${id}/${courseId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return data;
+  delete: ({ courseId, id: taskId }: DeleteTaskData) =>
+    client.delete<number>(`/courses/${taskId}/${courseId}`, getToken()),
 };

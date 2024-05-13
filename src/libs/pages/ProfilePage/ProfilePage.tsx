@@ -4,10 +4,10 @@ import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar.svg';
 import { ReactComponent as DoneIcon } from '../../../assets/icons/done.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import * as userActions from '../../slices/userSlice';
-
-import styles from './ProfilePage.module.scss';
 import { DataStatus } from '../../types';
 import { Loader } from '../../components';
+
+import styles from './ProfilePage.module.scss';
 
 export const ProfilePage = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +15,7 @@ export const ProfilePage = () => {
   const { userInfo, authRequestStatus } = useAppSelector(state => state.user);
 
   const isLoading = authRequestStatus === DataStatus.PENDING;
+  const hasInfo = !isLoading && !!userInfo;
 
   const completedTasksPercentage = useMemo(() => {
     if (userInfo) {
@@ -37,7 +38,7 @@ export const ProfilePage = () => {
     <div className={styles.container}>
       {isLoading && <Loader />}
 
-      {userInfo && (
+      {hasInfo && (
         <>
           <div className={styles.personInfoContainer}>
             <AvatarIcon className={styles.avatar} />

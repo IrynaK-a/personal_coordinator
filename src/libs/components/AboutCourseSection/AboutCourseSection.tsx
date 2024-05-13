@@ -8,8 +8,8 @@ import { ReactComponent as DeleteIcon } from '../../../assets/icons/delete.svg';
 import { ReactComponent as ChangeIcon } from '../../../assets/icons/change.svg';
 import { AppRoute, UpdateCourseData, ICourse } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import * as coursesActions from '../../slices/coursesSlice';
 import { createCourseSchema } from '../../validationSchemas/createCourseSchema';
+import * as coursesActions from '../../slices/coursesSlice';
 
 import styles from './AboutCourseSection.module.scss';
 

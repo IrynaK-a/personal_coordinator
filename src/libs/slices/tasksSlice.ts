@@ -9,7 +9,7 @@ import {
   DeleteTaskData,
   ICourseTask,
 } from '../types';
-import { create, deleteTask, updateTask } from '../api/tasksApi';
+import { tasksApi } from '../api/tasksApi';
 import { deleteCourse, getCurrent } from './coursesSlice';
 import { NOTIFICATION_MESSAGES } from '../constants';
 
@@ -30,7 +30,7 @@ const initialState: ICourseState = {
 export const createTask = createAsyncThunk(
   'tasks/add',
   async (payload: CreateTaskData) => {
-    const currentTask = await create(payload);
+    const currentTask = await tasksApi.create(payload);
 
     return currentTask;
   },
@@ -39,7 +39,7 @@ export const createTask = createAsyncThunk(
 export const deleteCurrentTask = createAsyncThunk(
   'tasks/delete',
   async (payload: DeleteTaskData) => {
-    const deletedTask = await deleteTask(payload);
+    const deletedTask = await tasksApi.delete(payload);
 
     return deletedTask;
   },
@@ -48,7 +48,7 @@ export const deleteCurrentTask = createAsyncThunk(
 export const updateCurrentTask = createAsyncThunk(
   'tasks/change',
   async (payload: UpdatedTaskData) => {
-    const updatedTask = await updateTask(payload);
+    const updatedTask = await tasksApi.update(payload);
 
     return updatedTask;
   },
